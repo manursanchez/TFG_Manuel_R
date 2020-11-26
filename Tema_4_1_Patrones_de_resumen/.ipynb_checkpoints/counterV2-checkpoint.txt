@@ -1,0 +1,8 @@
+"Bloques: "	{"Netherlands": 292, "France": 970, "Australia": 142}
+"Bloques: "	{"Netherlands": 269, "France": 1048, "Australia": 221}
+"Bloques: "	{"Netherlands": 279, "France": 917, "Australia": 137}
+"Bloques: "	{"Netherlands": 415, "France": 1093, "Australia": 367}
+"Bloques: "	{"Netherlands": 401, "France": 1117, "Australia": 146}
+"Bloques: "	{"Netherlands": 192, "France": 1261, "Australia": 201}
+"Bloques: "	{"Netherlands": 349, "France": 1077, "Australia": 37}
+"Bloques: "	{"Netherlands": 174, "France": 1074, "Australia": 8}
