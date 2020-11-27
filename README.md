@@ -1,4 +1,5 @@
-# Hadoop - MapReduce - Python - Trabajo Fin de Grado en Ingeniería Informática
+# Trabajo Fin de Grado en Ingeniería Informática
+# Hadoop - MapReduce - Python
 
 Este repositorio es parte del Trabajo Final de Grado en Ingeniería Informática de la UNED (Universidad Nacional de 
 Educación a Distancia)
