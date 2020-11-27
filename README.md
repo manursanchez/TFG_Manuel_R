@@ -1,9 +1,10 @@
-# Trabajo Fin de Grado - Manuel Rodríguez Sánchez
+# Hadoop - MapReduce - Python - Trabajo Fin de Grado en Ingeniería Informática
 
-Este repositorio es parte del trabajo final de grado de Ingeniería Informática de la UNED 
+Este repositorio es parte del Trabajo Final de Grado en Ingeniería Informática de la UNED (Universidad Nacional de 
+Educación a Distancia)
 
 Título: Implementación de casos de uso de patrones de diseño MapReduce en Python, 
-		sobre infraestructuras paralelas distribuidas basadas en contenedores ligeros
+	sobre infraestructuras paralelas distribuidas basadas en contenedores ligeros
 		
 Autor: Manuel Rodríguez Sánchez 
 
