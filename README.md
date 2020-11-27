@@ -1,4 +1,4 @@
-# Trabajo Fin de Grado en Ingeniería Informática
+# Trabajo Fin de Grado en Ingeniería Informática - UNED 
 # Título: Implementación de casos de uso de patrones de diseño MapReduce en Python, sobre infraestructuras paralelas distribuidas basadas en contenedores ligeros
 
 Este repositorio es parte del Trabajo Final de Grado en Ingeniería Informática de la UNED (Universidad Nacional de Educación a Distancia).
