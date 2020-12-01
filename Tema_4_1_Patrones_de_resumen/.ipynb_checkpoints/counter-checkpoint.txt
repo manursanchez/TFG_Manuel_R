@@ -1,8 +1,0 @@
-"Bloque Map de nodo: "	{"Netherlands": 292, "France": 970, "Australia": 142}
-"Bloque Map de nodo: "	{"Netherlands": 269, "France": 1048, "Australia": 221}
-"Bloque Map de nodo: "	{"Netherlands": 279, "France": 917, "Australia": 137}
-"Bloque Map de nodo: "	{"Netherlands": 415, "France": 1093, "Australia": 367}
-"Bloque Map de nodo: "	{"Netherlands": 401, "France": 1117, "Australia": 146}
-"Bloque Map de nodo: "	{"Netherlands": 192, "France": 1261, "Australia": 201}
-"Bloque Map de nodo: "	{"Netherlands": 349, "France": 1077, "Australia": 37}
-"Bloque Map de nodo: "	{"Netherlands": 174, "France": 1074, "Australia": 8}

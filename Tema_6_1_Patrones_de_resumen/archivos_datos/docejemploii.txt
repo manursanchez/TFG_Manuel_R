@@ -1,0 +1,4 @@
+linea1 El perro corre rapido
+linea2 El chavea corre con el perro que corre
+linea3 El chavea nada rapidamente y corre
+linea4 el chico de el camino es el mismo

@@ -1,0 +1,4 @@
+linea1 El perro corre rapido.
+linea2 El chavea juega con el perro en el parque.
+linea3 El chavea nada rapidamente.
+linea4 cuantas veces juega el chavea con el perro y en el parque
