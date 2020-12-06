@@ -1,8 +1,7 @@
 #!/usr/bin/python
-
-import re
 from mrjob.job import MRJob
-# Método para cargar el fichero en memoria
+import re
+
 def cargarFicheroEnMemoria(self,fichero):
     diccionario={}
     with open(fichero) as f:
@@ -14,25 +13,25 @@ def cargarFicheroEnMemoria(self,fichero):
             datos = linea.split(";")
             diccionario[datos[0]]=datos
     return diccionario
-class unionReplicadaV2(MRJob):
-    #archivo para cargarlo en memoria en forma de diccionario
-    FILES = ['archivos_datos\\tablaA-tablaB\\tablaA.csv']
+
+class unionReplicadaPruebas(MRJob):
+    FILES = ['archivos_datos/tablaA-tablaB/tablaA.csv']
     fichero='tablaA.csv'    
     def mapper_init(self):
         #Nos devuelve la estructura diccionario rellena con los datos del fichero
-        self.dicTablaA=cargarFicheroEnMemoria(self,self.fichero)
-    
-    def mapper(self,_,line):
+        self.dicTablaA=cargarFicheroEnMemoria(self,self.fichero) 
+       
+    """def mapper(self,_,line):
         self.linea=line.split(';')
         encontrado=re.search('[a-zA-Z]',self.linea[0])#Para que no tenga en cuenta las cabeceras de las tablas
         if encontrado==None:
             #Aplicamos algoritmo: 
-            self.clave=self.linea[0] #Se extrae la clave del fichero que llega desde el RUNNER
+            self.clave=self.linea[1] #Se extrae la clave del fichero que entra por línea de comandos 
              # Se comprueba que la clave del fichero de entrada esté en el diccionario
-            if self.clave in self.dicTablaA: #Si encuentra la clave en el diccionario unimos y cedemos (yield) resultado
+            if self.clave in self.dicTablaA: #Si encuentra la clave en el diccionario unimos y emitimos (yield) resultado
                 yield self.clave,(self.linea,self.dicTablaA.get(self.clave) )
             else:#Si no está, sacamos la línea del archivo pero sin su complementario del diccionario de memoria. Uniòn por la izquierda.
-                yield self.clave,(self.linea,"null")
-            
+                yield self.clave,(self.linea,"null")"""
+                
 if __name__ == '__main__':
-    unionReplicadaV2.run()
+    unionReplicadaPruebas.run()
