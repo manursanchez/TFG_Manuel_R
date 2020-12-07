@@ -10,3 +10,16 @@ Autor: Manuel Rodríguez Sánchez
 Director: Agustín Carlos Caminero Herráez
 
 Fecha de defensa: 18 de diciembre 2020
+
+# End of Degree Project in Computer Engineering - UNED
+# Title: Implementing MapReduce design pattern use cases in Python, on distributed parallel infrastructures based on lightweight containers
+
+This repository is part of the Final Degree Project in Computer Engineering at UNED (National University of Distance Education).
+
+This work addresses topics such as Big Data and distributed computing, as well as the Hadoop and MapReduce tools, which allow the deployment of this type of infrastructure, together with the development of design patterns in Python and the MRJob libraries for programming in the MapReduce paradigm.
+
+Author: Manuel Rodríguez Sánchez
+
+Director: Agustín Carlos Caminero Herráez
+
+Defense date: December 18, 2020
