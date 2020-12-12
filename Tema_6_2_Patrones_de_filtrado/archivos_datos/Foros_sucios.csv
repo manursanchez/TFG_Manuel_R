@@ -1,0 +1,1124 @@
+﻿id;title;tagnames;author_id;body;node_type;parent_id;abs_parent_id;added_at;score;state_string;last_edited_id;last_activity_by_id;last_activity_at;active_revision_id;extra;extra_ref_id;extra_count;marked
+11003345;;cs215 ;100000197;"<p>First of all, you have to give 'aliases' to all nodes in the graph, since string comparisons are slower than, for instance, int comparisons.</p>
+<p>Secondly, I never pop items from the open list. Since we only add to tail and take from head, I simply decided to use an index to retrieve the next item at that index, then increment the index. Despite what was said somewhere in the lecture that removal is O(1) operation, it does not seem to be so.</p>
+<p>Thirdly, I compute total distance as I go and divide that by the length of the open list in the end (right before return). That's in contrast to doing additional summation on the values of the temporary dictionary.</p>
+<p>There are some other optimizations and also I store edges in the graphs as tuples rather than dictionaries in which values are not used and are simply set to 1.</p>
+<hr>
+<p>I understand it may be hard to follow my words and understand what I am saying, so if there is considerable demand, I can post my code after the official solutions are released.</p>";comment;11003260;11003237;2012-07-20 21:02:14.017006+00;1;;\N;100000197;2012-07-20 21:02:14.017006+00;11004776;\N;\N;0;f
+11003365;;cs215 ;100020078;"<p>Anmar, I found an explicit formula for $%x$% using the derivative of the function we are trying to minimize with respect to $%x$%. </p>
+<p>The short proof is on top of the thread below (although I think that it is currently incorrectly marked as ps4-4). Obviously it contains a spoiler:</p>
+<p><a href=""http://forums.udacity.com/cs215/questions/3277/spoilers-mathematical-proofs-for-ps4-3-and-ps4-4"" rel=""nofollow"">http://forums.udacity.com/cs215/questions/3277/spoilers-mathematical-proofs-for-ps4-3-and-ps4-4</a></p>
+<p>If you want to do this without using calculus, you can expand the sum of squared distances and then write it in the form $%(x - a)^2 + C$%, where $%C$% and $%a$% are constants independent of $%x$%, but dependent on the values in the list. Then, $%a$% will be the value of $%x$% which minimizes the expression.</p>";comment;11003238;11003200;2012-07-20 22:35:56.211008+00;0;;11030878;100020078;2012-07-20 22:52:03.039791+00;11004827;\N;\N;0;f
+11003376;;cs215 ;100025468;"<p><a href=""http://forums.udacity.com/users/100023849/mike-stoessl""><a href=""http://forums.udacity.com/users/100023849/mike-stoessl"">@Mike</a></a>: one important trick i learnt in solving ps3-7 is to use collections.deque instead. it provides O(1) append and popleft operations. for some reason using an index pointer was a fraction of second slower than using deque. see this thread: <a href=""http://forums.udacity.com/cs215/questions/2834/my-solution-to-ps3-7-centrality"" rel=""nofollow"">http://forums.udacity.com/cs215/questions/2834/my-solution-to-ps3-7-centrality</a></p>";comment;11003237;11003237;2012-07-20 23:47:07.534634+00;0;;\N;100025468;2012-07-20 23:47:07.534634+00;11004835;\N;\N;0;f
+11003434;;cs215 ;100007117;"<p>If I understand you, this test is to know if the mode function is theta(n) compliant; when it is, then there're a direct relation between the list lenght and the running time. This direct relation is what we can see in the slopes list --if the numbers in the list are more o less equals, because they are obteined putting the times in relation with the lenght and they have to be equals if the function is theta(n) compliant.<br>
+thanks Kris</p>";comment;11003426;11003422;2012-07-21 20:37:02.049099+00;0;;11031184;100007117;2012-07-21 20:38:59.19425+00;11004920;\N;\N;0;f
+11003436;;cs215 ;100003020;"<p>buddy i am also getting centrality like 1.8 or 1.9 something which is not exactly half of the above given centralities. Could someone explain what wrong am i doing??<br>
+i have made a dictionary where movie is the key and the list of actors is the value.</p>";comment;11003271;11003237;2012-07-21 20:44:37.569548+00;0;;\N;100003020;2012-07-21 20:44:37.569548+00;11004922;\N;\N;0;f
+11003442;;cs215 ;100020078;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a>: I think that the other matrix multiplication approach that I used is a version of what you are talking about, but customized for unit weight graphs.</p>
+<p>Take the adjacency matrix $%G$% consisting of 1's where there are edges and 0's otherwise. Then, $%(i,j)$% entry in matrix product $%G^k$% is the number of paths of length $%k$% between nodes $%i$% and $%j$%. At each $%(i,j)$% in $%G^k$%, I compute the dot product of the corresponding row in $%G^{k-1}$% and column in $%G$% only when $%(i,j)$% entry in $%G^{k-1}$% is 0. <br>
+So, for each $%(i,j)$%, I only compute the values in $%G^k$% until I find the first $%l$% for which $%(i,j)$% entry in $%G^l$% is nonzero - the shortest distance between $%i$% and $%j$% is then exactly $%l$%, so I actually store $%l$% as $%(i,j)$% entry in $%G^l$% and this entry is unaltered in $%G^{l+1}, G^{l+2},...$% and so on (since we don't care about the number of paths between two vertices, but whether one exists, it is ok to store any nonzero value here, but I am using $%l$% to avoid storing the value of the shortest path in a separate matrix).  This is basically using the fact that the shortest distance equals the number of edges in the shortest path (something which is NOT necessarily true for graphs with non-unit weights).</p>
+<p>Also, it is ok to halt the computation of the dot product for an entry $%(i,j)$% the first time you multiply two nonzero numbers because the dot product will then necessarily be positive.</p>
+<p>I realize that I am slightly abusing the notation as my $%G^k$% does not actually contain the matrix product, but instead the lengths of shortest path, but it uses the matrix product for each entry until we reach a nonzero entry (this means that my $%G^k$% does agree with the actual matrix product $%G^k$% on zero entries). Please let me know if this makes sense, or if I should try to be more rigorous in my explanation.</p>
+<p>I tried using numpy to implement this, but the iterations were very slow. This method is adaptable to parallel processing because the values of $%G^k$% only depend on $%G^{k-1}$% and $%G^1$% and each dot product is independent.</p>";comment;11003441;11003416;2012-07-21 22:43:53.135124+00;0;;11031251;100020078;2012-07-21 23:10:33.483106+00;11004950;\N;\N;0;f
+11003450;;cs215 ;100008880;"<p><a href=""http://forums.udacity.com/users/100088782/chaim""><a href=""http://forums.udacity.com/users/100088782/chaim"">@chaim</a></a> with DFS it'll you as far down a path then backtrack until it's explored all the paths, in the example of the ring a - b - c - d - a DFS will either go a,b,c,d,a or a,d,c,b,a. Either way it will incorrectly think the shortest path to d is 3 (1st example) and b is 3 (2nd example).</p>
+<p>If we used BFS on the however, because of the edge between a-d BFS will have correctly found out the shortest path to d is 1.</p>";comment;11002632;11002618;2012-07-22 00:06:09.641834+00;1;;\N;100008880;2012-07-22 00:06:09.641834+00;11004956;\N;\N;0;f
+11003479;;cs215 ;100026104;"<p>Hey that's a nice way to get bypass the issue with the key error; however, does the call to the function still have to check to see if the value is in the table?  cause if so, than it is the same amount (or possibly more operations based on what's going on under the hood) + the time and it takes and issues you run into when calling even a built-in function.</p>
+<p>Btw... I have also seen in other languages a performance gain in the past from referencing the id or value in a tmp var to prevent an additional lookup.</p>";comment;11003474;11003466;2012-07-22 10:14:53.68596+00;0;;11031432;100026104;2012-07-22 10:56:46.552756+00;11005023;\N;\N;0;f
+11003520;;cs215 ;100073491;"<p>Milos, I respectfully disagree. Try telling this to folks who get paid to implement fastest-possible (in absolute terms) implementations of particular algorithms. Few extreme examples include GPU-based password crackers, FPGA-based HFT appliances etc. In real life both algorithms and implementations are very important to achieve top performance and neither field is ""trivial"" in general case. If implementation optimizations were so ""trivial"" then a good compiler (or JIT-environment) would have already implemented them and there would be no benefit in doing it manually, but we all know it is not the case.</p>
+<p>Yes, my interest in optimal implementations is likely predicated by my ""programmer's"" side but I actually love both good algorithms and good implementations. To tell you the truth I would probably prefer a good algo to good code :)</p>";comment;11003512;11003496;2012-07-22 20:56:01.491474+00;0;;11031628;100073491;2012-07-22 21:06:43.115645+00;11005094;\N;\N;0;f
+11003541;;cs215 ;100020078;"<p>One other thing regarding raising the matrix to its powers. Since the adjacency matrix is symmetric, it is diagonalizable, so its singular value decomposition will necessarily have the first and the third matrix such that their product is the identity matrix.<br>
+Then raising the matrix to a power is just a matter of raising the middle diagonal matrix to its power, this is $%O(n)$%, so this would make successive computations of matrix powers fast. <br>
+However, I think that computing SVD is $%O(n^3)$% in general case and prone to accuracy issues for large matrices.</p>
+<p>Also, do we know whether these graphs are connected? If they are not, we can split them into smaller subgraphs and the adjacency matrices will become smaller. This would be just an improvement in the constant for this particular problem, but not in the order of complexity.</p>
+<p>One other exact approach comes to mind: representation using linear programs and solving using simplex algorithm, this is exponential in the worst case, but is supposed to perform well on average. </p>
+<p>I was also thinking about using some machine learning techniques. We can represent the vertices by their adjacency lists (or maybe truncated adjacency list). Take some fixed subset of vertices, run shortest path algorithm from them and get exact shortest paths to all vertices from this set of vertices. Then, try to learn the features from these vertices and apply it to the unknown ones in the remainder of the graph. I have no idea how accurate the predictions would be...</p>";comment;11003441;11003416;2012-07-23 02:57:55.119459+00;1;;11031743;100020078;2012-07-23 03:00:37.1696+00;11005149;\N;\N;0;f
+11003549;;cs215 ;100020078;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a></a></a>, you're right about the LP, I remembered that the dual was Dijkstra as soon as I posted my comment, we don't want that because we want to exploit unit edges.</p>
+<p>SVD is exact in theory, although as far as I remember, the fastest algorithms for computing SVD are iterative and numerical, so yes, you would be dealing with floats and need to worry about conversion back to integers. I tried implementing SVD, but numpy wouldn't compute it because the array is too large. Maybe there is some special algorithm for sparse binary matrices? I think I will try to implement this in Mathematica.</p>
+<p><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3""><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3"">@D</a></a> Kulakovsky: BFS for all-pairs shortest paths is $%O(V(V + E))$% which for the graphs with large number of edges is $%O(V^3)$%. The paper that <a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a></a></a> linked to above describes an algorithm which is $%O(V^k \log{(V)})$%, with $%k &lt; 3$%, so in should be faster than all-pairs BFS with large number of vertices. However, it requires a sophisticated implementation of matrix multiplication and would probably  not be faster than BFS in our problem because of the relatively small number of edges.</p>";comment;11003441;11003416;2012-07-23 05:00:52.996099+00;0;;11031788;100020078;2012-07-23 05:08:35.559539+00;11005166;\N;\N;0;f
+11003552;;cs215 ;100020078;"<p><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3""><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3"">@D</a></a> Kulakovsky, and this is why we are trying to find an approach which exploits the sparse nature of adjacency matrix or the fact that it is binary. Also, don't discount the constants, you essentially only need half of the adjacency matrix because it is symmetric, so this would give you a constant of $%(\frac{1}{2})^{2.376}$% for the whole algorithm whereas in BFS you really do explore all of $%V(V+E)$% edges and vertices.</p>
+<p>Also, I was thinking about the way to combine BFS for some vertices and matrix powers when they both give partial results.</p>";comment;11003441;11003416;2012-07-23 05:20:56.282881+00;0;;11031797;100020078;2012-07-23 05:23:16.415247+00;11005173;\N;\N;0;f
+11003572;;cs215 ;100073491;"<p>I have a feeling that bipartite property can be utilized to give us at least some constant improvement but all my ""enhancements"" are failing so far to improve running time. It is also worthwhile to note that such kind of bipartites are asymmetrical, i.e. #of movie vertices &lt;&lt; #of actor vertices which might be useful. Yet another note is that imdb graphs (as many other social network graphs) have small diameters. Not sure if later can be used to improve the algo though. In any case, my current intuition is that no significant improvement is possible for a generic undirected/unweighted APSP problem, but there might be some options for special cases.</p>";comment;11003441;11003416;2012-07-23 14:05:51.859111+00;0;;\N;100073491;2012-07-23 14:05:51.859111+00;11005204;\N;\N;0;f
+11003577;;cs215 ;100026104;"<p>Your original function:</p>
+<pre><code>def mode_ked4r_original(L):
+    counts = {}
+    modev, maxcount = None, 0
+    for v in L:
+        counts[v] = counts.get(v, 0) + 1
+        if counts[v] &gt; maxcount:
+            modev, maxcount = v, counts[v]
+    return modev
+</code></pre>
+<p>gave the results:</p>
+<pre><code>mode_anthony was 1.33405692233 times faster than mode_ked4r_original
+mode_anthony was 1.17918109108 times faster than mode_ked4r_original
+mode_anthony was 1.18210110186 times faster than mode_ked4r_original
+mode_anthony was 1.10258397933 times faster than mode_ked4r_original
+mode_anthony was 1.0609190241 times faster than mode_ked4r_original
+mode_anthony was 1.17678345125 times faster than mode_ked4r_original
+mode_anthony was 1.09760659585 times faster than mode_ked4r_original
+mode_anthony was 1.11778118909 times faster than mode_ked4r_original
+mode_anthony was 1.0900721128 times faster than mode_ked4r_original
+mode_anthony was 1.09776219598 times faster than mode_ked4r_original
+mode_anthony was 1.09745768945 times faster than mode_ked4r_original
+mode_anthony was 1.1055880216 times faster than mode_ked4r_original
+
+mode_anthony is 1.13286480625 times faster than mode_ked4r_original on average
+</code></pre>
+<p>But your new function is much better, giving the results:</p>
+<pre><code>mode_ked4r_v2 was 1.12518124698 times faster than mode_anthony
+mode_ked4r_v2 was 1.12430752601 times faster than mode_anthony
+mode_ked4r_v2 was 1.06000375023 times faster than mode_anthony
+mode_ked4r_v2 was 1.21992622335 times faster than mode_anthony
+mode_ked4r_v2 was 1.15733403479 times faster than mode_anthony
+mode_ked4r_v2 was 1.14806194236 times faster than mode_anthony
+mode_ked4r_v2 was 1.16833257318 times faster than mode_anthony
+mode_ked4r_v2 was 1.1740927173 times faster than mode_anthony
+mode_ked4r_v2 was 1.16131848172 times faster than mode_anthony
+mode_ked4r_v2 was 1.18142592791 times faster than mode_anthony
+mode_ked4r_v2 was 1.18242138587 times faster than mode_anthony
+mode_ked4r_v2 was 1.17942528954 times faster than mode_anthony
+
+mode_ked4r_v2 is 1.15681925827 times faster than mode_anthony on average
+</code></pre>";comment;11003474;11003466;2012-07-23 15:56:57.401007+00;0;;\N;100026104;2012-07-23 15:56:57.401007+00;11005210;\N;\N;0;f
+11003591;;cs215 ;100025468;"<p><a href=""http://forums.udacity.com/users/100011294/jeff-blohm""><a href=""http://forums.udacity.com/users/100011294/jeff-blohm"">@Jeff</a></a>: Isn't this expression also an approximation? Shouldn't <a href=""http://forums.udacity.com/users/100004818/jean-victor-cote""><a href=""http://forums.udacity.com/users/100004818/jean-victor-cote"">@Jean-Victor</a></a> be using $%\lfloor \log_2(i) \rfloor$%?</p>";comment;11003521;11003503;2012-07-23 19:04:49.523669+00;0;;\N;100025468;2012-07-23 19:04:49.523669+00;11005227;\N;\N;0;f
+11003597;;cs215 ;100103101;"<p>Milos: Ooh, that's cool.  I hadn't seen that before.  Very clever!</p>
+<p>(Of course, using this idea for the current question gives you an n log n solution.)</p>";comment;11003595;11003588;2012-07-23 20:49:35.513211+00;0;;\N;100103101;2012-07-23 20:49:35.513211+00;11005238;\N;\N;0;f
+11003602;;cs215 ;100073491;<p>Wow, Nice!</p>;comment;11003595;11003588;2012-07-23 21:23:01.288635+00;0;;\N;100073491;2012-07-23 21:23:01.288635+00;11005244;\N;\N;0;f
+11003641;;cs215 ;100073491;"<p>Here are the few problems I see:<br>
+1. The code is not fully specified: <code>centrality</code> function is not defined, <code>make_link</code> is not defined (but we can assume you used a ""standard"" version of it)<br>
+2. You ignore year information when considering movie identity. This is not a fatal mistake as with this particular dataset it does not sufficiently affect the results but still is problematic from code correctness standpoint. You can find further discussion of this topic <a href=""http://forums.udacity.com/cs215/questions/3318/closed-issues-with-ps4-6-actor-centrality"" rel=""nofollow"">here</a><br>
+3. Performing sorting operation in a loop. This is really unnecessary and could significantly impact performance, depending on sorting algorithm used by a Python <code>sort</code> function. Sorting can be easily moved outside the loop and done once after all centrality ranks are computed. Strictly speaking, sorting is not needed here at all as you can use a top-k algorithm and save some (non-essential in this case) CPU cycles.</p>";comment;11003632;11003605;2012-07-24 07:08:55.97934+00;0;;11032270;100073491;2012-07-24 07:09:44.107867+00;11005318;\N;\N;0;f
+11003663;;cs215 ;100026104;"<p><a href=""http://forums.udacity.com/users/100103101/michael-littman""><a href=""http://forums.udacity.com/users/100103101/michael-littman"">@Michael Littman</a></a> 1 : Usually in the other courses, we get a great deal more videos, and one of the features is that students get to ask questions of the Prof or the TA, and have them answered in an ""Office Hours"" segment.</p>
+<p>If you are off site, I completely understand; however, maybe a google chat session might be doable?</p>
+<p>Also, although I think that the answer videos not being posted right away is a very good thing, as it gives us time to do the work, I would  like to see more of them; for, I find videos that explain a pro's thought process are very useful in getting me to think similarly.</p>
+<p>BTW... even though there are occasionally errors in the course vids or questions, and although I might complain about the issues on the boards, I really did want to complement you on your teaching style;  you are obviously well practised at it, and really quite good.</p>
+<p>L8r,<br>
+Anthony</p>";comment;11003446;11003446;2012-07-24 14:29:11.633875+00;0;;11032435;100026104;2012-07-24 14:34:38.940102+00;11005361;\N;\N;0;f
+11003670;;cs215 ;100025877;<p>IE hardly counts as a functional web browser. I strongly recommend at least having Chrome or Opera in the back pocket.</p>;comment;11003661;11003623;2012-07-24 15:58:01.494105+00;0;;\N;100025877;2012-07-24 15:58:01.494105+00;11005378;\N;\N;0;f
+11003690;;cs215 ;100011294;"<p>I don't feel like you overstepped.  We're all equals here and we're all trying to help.  Looking back on the example I chose, I'm inclined to agree with you... I probably should have picked something simple like [1,2,3] just to illustrate how the result changes with changes to x.</p>
+<p>Of course, <a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic"">@Milos</a></a></a></a> is also correct. We really need to encourage people to search the existing discussions.  In this case, he could have found several discussion which contained the actual answers, either stated or in code.  </p>
+<p>This Udacity environment is amazing.  There are so many people from so many cultures and so many different levels of experience.  Hopefully most of the time people will be happy with the interactions, but sometimes there will be problems/misunderstandings.</p>
+<p>PS: <a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic"">@Milos</a></a></a></a> please continue sharing your work.  I've particularly enjoyed your postings on the proofs!</p>";comment;11003665;11003622;2012-07-24 20:17:13.859604+00;0;;11032592;100011294;2012-07-24 20:18:04.254712+00;11005417;\N;\N;0;f
+11003692;;cs215 ;100020078;"<p><a href=""http://forums.udacity.com/users/100011294/jeff-blohm""><a href=""http://forums.udacity.com/users/100011294/jeff-blohm"">@Jeff</a></a>, I was actually wondering before I started posting on the Udacity forums if there are some guidelines regarding posting homework solutions? </p>
+<p>My own rule of thumb is that it is ok to give small hints or point out the calculation/code mistakes or logical flaws in arguments. I only write out a full solution/proof only when someone else has already provided an answer and I think that my approach is sufficiently different to provide a different perspective.</p>
+<p>Sorry, I did not mean to indicate that I would not continue to post, just my concerns regarding providing direct answers (but this is a whole separate topic of how something like that could be handled in online education). With that said, I have really enjoying the discussions here - I already loved the topic, but it is great that so many people are passionate about it and also this way of learning.</p>";comment;11003665;11003622;2012-07-24 20:57:24.837484+00;0;;11032602;100020078;2012-07-24 20:58:04.375194+00;11005420;\N;\N;0;f
+11003693;;cs215 ;100012879;<p>The course is self paced, they don't have to wait</p>;comment;11003668;11003668;2012-07-24 21:43:00.031677+00;2;;\N;100012879;2012-07-24 21:43:00.031677+00;11005421;\N;\N;0;f
+11003695;;cs215 ;100012879;<p>I tried it but it wasn't a spectacular reduction in time :(</p>;comment;11003673;11003648;2012-07-24 21:45:40.72512+00;0;;11032617;100012879;2012-07-24 21:46:57.029151+00;11005424;\N;\N;0;f
+11003699;;cs215 ;100020078;<p>really cool! that library has some wonderful visualizations.</p>;comment;11003698;11003698;2012-07-24 22:10:14.239792+00;0;;\N;100020078;2012-07-24 22:10:14.239792+00;11005429;\N;\N;0;f
+11003701;;cs215 ;100026104;<p>it's up...</p>;comment;11003668;11003668;2012-07-24 22:24:03.971205+00;0;;\N;100026104;2012-07-24 22:24:03.971205+00;11005431;\N;\N;0;f
+11003705;;cs215 ;100016349;<p>As long as you want.  I'll update my post.</p>;comment;11003704;11003606;2012-07-24 23:04:53.132575+00;0;;\N;100016349;2012-07-24 23:04:53.132575+00;11005436;\N;\N;0;f
+11003711;;cs215 ;100036189;<p>That is gorgeous.</p>;comment;11000785;11000622;2012-07-25 01:26:13.963922+00;0;;\N;100036189;2012-07-25 01:26:13.963922+00;11005444;\N;\N;0;f
+11003713;;cs215 ;100068367;<p>Thanks Jon! :-)</p>;comment;11001466;11000622;2012-07-25 01:56:33.617588+00;0;;\N;100068367;2012-07-25 01:56:33.617588+00;11005446;\N;\N;0;f
+11003714;;cs215 ;100005924;<p>I appended the year to title to get distinct title. There could be movies with same titles in different years.</p>;comment;11003687;11003680;2012-07-25 02:24:22.428666+00;0;;\N;100005924;2012-07-25 02:24:22.428666+00;11005448;\N;\N;0;f
+11003759;;cs215 ;100002309;"<p>The node of interest in determining its expected value is v; neither w nor x.  The node w is a neighbor to v, and x is a neighbor to w.  The quote, as you have stated, describes the edges (w,x), not the node v, to have been selected uniformly at random.  Sampling is synonymous with selection, and sampling is to be performed uniformly at random, is it not?  Therefore, it is difficult to determine what it is that the question is asking, and for all I know, I implemented it incorrectly despite having been told that my solution was correct: I may be required to sample the neighbors of v a very large number of times, such that the approximate solution approaches the exact solution, and hope that it gets close enough to be graded as correct upon submission.</p>";comment;11003726;11003710;2012-07-25 13:08:41.209317+00;0;;\N;100002309;2012-07-25 13:08:41.209317+00;11005521;\N;\N;0;f
+11003760;;cs215 ;100013357;"<p>This is a good idea, i didn't think of it. But i thought movies have distinct names, and if it is a sequel will have a number or something attached after the name - like Terminator III instead of Terminator - just saying ;-)</p>";comment;11003687;11003680;2012-07-25 13:47:12.874572+00;1;;\N;100013357;2012-07-25 13:47:12.874572+00;11005522;\N;\N;0;f
+11003797;;cs215 ;100020078;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a>, I must admit that statistics are my weak side of mathematics (some people don't call it mathematics), so I would have to carefully look at the statistics used in the algorithm to make an educated comment. Certainly, the time improvement is impressive and I think that it is a clever idea to compute exact distances from a selected subset of nodes and then estimate the others from there. </p>
+<p>I was thinking about using the stats in a method that for each vertex finds a partial list of shortest paths, but this is difficult without either running full bfs or being biased towards nodes with short distances and running into some data dependency issues.</p>
+<p>I think that the following is my main disappointment with the exact APSP algorithms that we have encountered. Using bfs from every node computes the shortest path between many intermediate nodes in the tree. However, this information never gets used again in successive iterations of bfs originating at a different vertex, so it just feels like there could be a lot of redundant computations. It would be very cool if there was a statistical way which actually exploits the structure of a graph, like Bayesian inference, but unfortunately I don't know much about this.</p>";comment;11003793;11003416;2012-07-26 02:58:09.136094+00;1;;11033352;100020078;2012-07-26 02:59:45.855979+00;11005578;\N;\N;0;f
+11003803;;cs215 ;100025468;<p>I think the Chan paper is the best approach (so far) I have read that uses BFS and reduces some redundant computation. I haven't thought about message passing algorithms but I think such an approach may be a modification of the floyd-warshall DP algorithm. Will have to think about it more. So far, the sampling approach is quite powerful and fast. Haven't been able to get a faster method yet.</p>;comment;11003793;11003416;2012-07-26 03:31:16.89184+00;0;;\N;100025468;2012-07-26 03:31:16.89184+00;11005584;\N;\N;0;f
+11003827;;cs215 ;100008098;"<p>In Linux the code raises a ZeroDivisionError because of the difference in time.clock(). <a href=""http://stackoverflow.com/questions/85451/python-time-clock-vs-time-time-accuracy/85519#85519"" rel=""nofollow"">http://stackoverflow.com/questions/85451/python-time-clock-vs-time-time-accuracy/85519#85519</a></p>
+<p>I changed it to use time.time() and I got these results:</p>
+<pre><code>mode_anthony was 2.01988217968 times faster than mode_chris
+mode_anthony was 1.4913899139 times faster than mode_chris
+mode_anthony was 1.03311825125 times faster than mode_chris
+mode_chris was 1.46840148699 times faster than mode_anthony
+mode_chris was 1.93586516932 times faster than mode_anthony
+mode_chris was 1.81030105852 times faster than mode_anthony
+mode_chris was 1.92336357843 times faster than mode_anthony
+mode_chris was 2.09759486048 times faster than mode_anthony
+mode_chris was 2.11126187578 times faster than mode_anthony
+mode_chris was 2.08998777405 times faster than mode_anthony
+mode_chris was 1.96135059964 times faster than mode_anthony
+mode_chris was 2.00775678066 times faster than mode_anthony
+</code></pre>
+<p>Would you mind running my code as I'm just curious about the Windows/Linux difference?</p>
+<pre><code>def mode_chris(L):
+    counts = defaultdict(int)
+    for i in L:
+        counts[i] += 1
+    return max(counts.items(), key=itemgetter(1))[0]
+</code></pre>";comment;11003504;11003466;2012-07-26 19:50:56.058902+00;0;;\N;100008098;2012-07-26 19:50:56.058902+00;11005620;\N;\N;0;f
+11003860;;cs215 ;100011294;"<p><a href=""http://forums.udacity.com/users/100020078/milos-curcic""><a href=""http://forums.udacity.com/users/100020078/milos-curcic"">@Milos</a></a>, Udacity seems to gradually be evolving the ways in which they run classes.  In previous sessions, we had semi-hard deadlines for homework.  Back then the 'rules' were pretty easy:</p>
+<ul>
+<li>Before the deadline, give hints/guidance.</li>
+<li>After the deadline, share full solutions.</li>
+</ul>
+<p>But now, with 'no deadlines', it's a lot harder to figure out what to do.  I haven't seen any real guidance from Udacity on this, so it seems that it is really up to us to blunder our way through.</p>
+<p>Personally, I really DON'T want this to become an ego battle where people race to see who can post their solution first. (So far this hasn't been an issue.)  I'd rather see people wait at least four or five days from homework release before they post complete solutions.  But it's hard to even suggest this when the homework release dates aren't consistent from week to week.</p>
+<p>So all I think we can do for now is to be careful to put 'spoiler' in the tags when we publish solutions.</p>
+<p>As a final comment, I enjoy reading the solutions that other folks come up with... especially the ones that have a unique take/approach to the problem.</p>";comment;11003665;11003622;2012-07-27 02:37:42.673653+00;0;;\N;100011294;2012-07-27 02:37:42.673653+00;11005664;\N;\N;0;f
+11003885;;cs215 ;100011294;"<p>If you are on windows7, and your configuration is relatively normal, the line in your program should be:</p>
+<pre><code>marvelG = read_graph('C:\Users\suh\Desktop\uniq_edges.tsv')
+</code></pre>
+<p>One last idea.</p>
+<p>You should go back and look at how you got the yob1995 file open.  You should then 'model' your imdb code so it is similar to the 'yob' code.</p>
+<ul>
+<li>Put the .py file for the imdb problem in the same directory as the .py file for the yob problem.</li>
+<li>Put the .tsv file for the imdb problem in the same directory as the yob1995.txt file.</li>
+<li>Make sure that the parameter to read_list in the yob problem is structured the same as the parameter to read_graph in the imdb problem.  Yes, the <em>names</em> of the files will be different, but if you didn't have a path for the yob problem you shouldn't have a path for the imdb problem.</li>
+<li>Make SURE that you are spelling the name of the file correctly.</li>
+</ul>
+<p>Since you were able to make the yob solution work, by following the steps above, your imdb data should be read in successfully.</p>
+<p>If not, then I don't think I have any other suggestions for you.  Maybe someone else can help...</p>";comment;11003851;11003806;2012-07-27 06:43:21.763856+00;0;;11033772;100011294;2012-07-27 06:44:08.788059+00;11005702;\N;\N;0;f
+11003905;;cs215 ;100011294;"<p>This thread has gotten a bit mixed-up because of editing and upvoting.  <a href=""http://forums.udacity.com/users/100045571/andre"">@Andre</a> was initially just trying to get a better understanding of what the weight of a connection was (because the video had no subtitles).</p>
+<p>The reference to Professor Michael was/is (I think) a request for you to explain the algorithmic complexity of the solution you wrote for the problem.  <a href=""http://forums.udacity.com/users/100027939/aleksandr-luferov""><a href=""http://forums.udacity.com/users/100027939/aleksandr-luferov"">@Aleksandr</a></a> proposed N**3 in the worst case.</p>";comment;11003854;11003844;2012-07-27 17:24:00.79787+00;1;;11033915;100011294;2012-07-27 17:24:28.597638+00;11005737;\N;\N;0;f
+11003941;;cs215 ;100012879;"<p>Yes I see now. This is the working code so far with heapq, so as to not code the whole heap and not double add with the index:</p>
+<pre><code>import csv
+import time
+import heapq
+
+def make_link(G, node1, node2):
+    if node1 not in G:
+        G[node1] = {}
+    if node2 not in G[node1]:
+        G[node1][node2] = 1
+    else:
+        G[node1][node2] += 1
+    if node2 not in G:
+        G[node2] = {}
+    if node1 not in G[node2]:
+        G[node2][node1] = 1
+    else:
+        G[node2][node1] += 1
+    return G
+
+def read_graph(filename):
+    # Read an undirected graph in CSV format. Each line is an edge
+    tsv = csv.reader(open(filename), delimiter='\t')
+    G = {}
+    characters = {}
+    index = 0
+    # graph characters-comics books
+    for (node1, node2) in tsv: 
+        if node1 not in characters:
+             characters[char] = index
+             index += 1
+        make_link(G, node1, node2)
+    return G, characters
+
+marvelG, characters = read_graph('uniq_edges.tsv')
+# graph characters-characters
+
+#Let's make a character-to-character graph
+#Note that if an edge is added multiple times, the strength increases
+def val(node):
+    return node[0]
+
+time1 = time.time()
+charG = {}
+for char1 in characters:
+    for book in marvelG[char1]:
+        for char2 in marvelG[book]:        
+                 make_link(charG, char1, char2)
+time2 = time.time()
+print ""time to compute strenghts"", time2 - time1
+
+heap=[]
+k = 10
+for char1 in characters:
+    for char2 in charG[char1]:
+        #avoid duplicates by only including pairs where the character
+        #number of the first is less than that of the second
+        if characters[char1] &lt; characters[char2]:
+            if len(heap) &lt; k:
+                heapq.heappush(heap,(charG[char1][char2]/2, (char1, char2)))
+            elif charG[char1][char2] &gt; val(heap[0]):
+                heapq.heappushpop(heap,(charG[char1][char2]/2, (char1, char2)))
+print [heapq.heappop(heap) for _ in range(k)]
+</code></pre>";comment;11003928;11003924;2012-07-27 21:44:11.957289+00;0;;11034060;100012879;2012-07-27 22:04:17.251528+00;11005799;\N;\N;0;f
+11003947;;cs215 ;100025468;<p>its just to number characters in the order they appear in the file. the characters will be numbered 0, 1, 2, .., etc. the result of max computation is not different but the numbering scheme is more sensible (i.e. it is not the last line number that the character appears in).</p>;comment;11003928;11003924;2012-07-27 22:04:05.575248+00;0;;11034061;100025468;2012-07-27 22:04:27.428184+00;11005800;\N;\N;0;f
+11003993;;cs215 ;100020078;"<p>I was thinking about using the fact that <a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a> mentions in another approach.</p>
+<p>Suppose that we are able to keep track of which shortest paths have been computed (as subpaths going down the bfs trees).<br>
+Then, in the next iteration, instead of running bfs from some arbitrary node, run it from the one which has the smallest number of shortest paths already computed in order to maximize the number of new shortest paths that the bfs will compute in the iteration. </p>
+<p>I don't have a feeling how well this heuristic would perform and whether this would significantly decrease the total number of bfs that you have to perform.</p>";comment;11003981;11003977;2012-07-29 02:40:29.557891+00;0;;\N;100020078;2012-07-29 02:40:29.557891+00;11005875;\N;\N;0;f
+11004084;;cs215 ;100068905;"<p>The issue is really just a typo, but a typo that may flag a more general issue.  One 'wants' to use a function that is 1 or 0 because of the nice applications of such 'characteristic' functions in probability and measure theory.  However, conventional enumerations force changes in the particular description of such functions in code applications.  For what it's worth, to a (present or former) mathematician, the summation you describe is over all w and all x in G[v], and thus double-counts the potential edges, which are what one implicitly selects at random with a probability of 2/(n<em>(n-1)).  Hence the '0.5 or 0'.  (With a denominator instead of n</em>(n-1), one would be selecting instead ordered pairs at random.  The issue is merely pedantic until one's code starts producing answers that are off by a multiple. <br>
+An interesting question is how to change the sampling procedure to get faster convergence, but that's another topic.)<br>
+Very sorry about the title.  Old habits.  I'll use 'Prof.' in the future.</p>";comment;11004081;11004054;2012-07-30 15:29:52.598193+00;0;;11034901;100068905;2012-07-30 15:40:09.355924+00;11006019;\N;\N;0;f
+11004143;;cs215 ;100012879;"<p>Thanks. I was trying to mimic Prof Littman's code because we haven't got a full solution to this quiz.This is the full working code with the fixes:</p>
+<pre><code>import csv
+import time
+import heapq
+
+def make_link(G, node1, node2):
+    if node1 not in G:
+        G[node1] = {}
+    if node2 not in G[node1]:
+        G[node1][node2] = 1
+    else:
+        G[node1][node2] += 1
+    if node2 not in G:
+        G[node2] = {}
+    if node1 not in G[node2]:
+        G[node2][node1] = 1
+    else:
+        G[node2][node1] += 1
+    return G
+
+def read_graph(filename):
+    tsv = csv.reader(open(filename), delimiter='\t')
+    G = {}
+    characters = {}
+    index = 0
+    for (node1, node2) in tsv: 
+        if node1 not in characters:
+            characters[node1] = index
+            index += 1
+        make_link(G, node1, node2)
+    return G, characters
+
+marvelG, characters = read_graph('uniq_edges.tsv')
+
+def val(node):
+    return node[0]
+
+time1 = time.time()
+charG = {}
+for char1 in characters:
+    if char1 not in charG:
+        charG[char1] = {}
+    for book in marvelG[char1]:
+        for char2 in marvelG[book]:        
+            if char1 &gt; char2:
+                 make_link(charG, char1, char2)
+time2 = time.time()
+print ""time to compute strenghts"", time2 - time1
+
+heap=[]
+k = 10
+for char1 in characters:
+    for char2 in charG[char1]:
+        #avoid duplicates by only including pairs where the character
+        #number of the first is less than that of the second
+        if characters[char1] &lt; characters[char2]:
+            if len(heap) &lt; k:
+                heapq.heappush(heap,(charG[char1][char2], (char1, char2)))
+            elif charG[char1][char2] &gt; val(heap[0]):
+                heapq.heappushpop(heap,(charG[char1][char2], (char1, char2)))
+print [heapq.heappop(heap) for _ in range(k)]
+</code></pre>";comment;11003716;11003709;2012-07-31 08:50:23.972173+00;0;;11035249;100012879;2012-07-31 08:54:23.98665+00;11006092;\N;\N;0;f
+11004209;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/cs215/users/59/andy55555"" rel=""nofollow""><a href=""http://forums.udacity.com/users/100026947/andy55555-7""><a href=""http://forums.udacity.com/users/100026947/andy55555-7"">@Andy</a></a></a>:Nope, with some additional hacking I was able to conclude that my code just barely misses the thresholds, even on Udacity servers. Essentially, in a 1000-node test case my code is able to successfully compute 750 out of 1000 final_dist elements before it timeouts. My conclusion is that grader was designed to aggressively match performance of some ""reference"" heapq-based implementation and any significant deviation would throw it off. I am still not convinced that NO alternative acceptable implementation is possible but the game is quite high.</p>";comment;11004198;11004145;2012-08-01 04:51:27.3064+00;0;;\N;100073491;2012-08-01 04:51:27.3064+00;11006192;\N;\N;0;f
+11004249;;cs215 ;100011294;"<p><a href=""http://forums.udacity.com/users/100012879/persep""><a href=""http://forums.udacity.com/users/100012879/persep"">@PerseP</a></a>, no the least obscure path is not necessarily the shortest path.  Using the same example as <a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a></a></a>, the shortest path is:</p>
+<p>['Sheppard, William Morgan', 'Star Trek2009', 'Berry Jr., Michael', 'Pirates of the Caribbean: The Curse of the Black Pearl2003', 'Crook, Mackenzie']</p>
+<p>This is significantly shorter than the least obscure path presented by <a href=""http://forums.udacity.com/users/100062358/kedrzu"">@kedr</a>.</p>
+<p>One interesting side point:  I believe that there can be a <em>lot</em> of equivalent least obscure paths.  Think about it. As long as you route through a very popular (== not obscure) movie, it costs you nothing at all! </p>
+<p>My least obscure path for this same example is:</p>
+<p>['Sheppard, William Morgan', 'Transformers2007', 'Harnell, Jess', 'Toy Story 32010', 'Angel, Jack (I)', ""Pirates of the Caribbean: At World's End2007"", 'Crook, Mackenzie']</p>
+<p>Shorter than <a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a></a></a>'s but still longer than the shortest path.</p>
+<p>The key point about the least obscure path is that the <strong>total value</strong> of the path is determined by the single most obscure movie along that path.</p>";comment;11004181;11004146;2012-08-01 18:34:25.741013+00;2;;\N;100011294;2012-08-01 18:34:25.741013+00;11006250;\N;\N;0;f
+11004275;;cs215 ;100025468;"<p>Interesting! I used two test harnesses: (1) make_random_graph given by <a href=""http://forums.udacity.com/users/100116226/jobin-raju"">@Job</a> and (2) make_mc_graph based on <a href=""http://forums.udacity.com/users/100022094/michele-calgaro""><a href=""http://forums.udacity.com/users/100022094/michele-calgaro"">@Michele</a></a>'s test2 graph generator. As the graph becomes denser, the position-based implementation becomes faster. When the graph is not very dense, my implementation is faster. The three implementations I compared are mine (without heapq), D's (without heapq D) and Michele's (without heapq MC).</p>
+<p>In hindsight, this is obvious since my implementation adds the same node to heap multiple times and just ignores some values (this problem will be exacerbated in dense graphs).</p>
+<pre>using make_random_graph to generate random graphs
+avg of time taken for 10 trials of 100 size graph, without heapq/with heapq: 2.818, without heapq D/with heapq: 2.831, without heapq MC/with heapq: 9.515
+avg of time taken for 10 trials of 300 size graph, without heapq/with heapq: 2.964, without heapq D/with heapq: 3.182, without heapq MC/with heapq: 11.187
+avg of time taken for 10 trials of 600 size graph, without heapq/with heapq: 3.065, without heapq D/with heapq: 3.302, without heapq MC/with heapq: 11.810
+avg of time taken for 10 trials of 1000 size graph, without heapq/with heapq: 3.121, without heapq D/with heapq: 3.374, without heapq MC/with heapq: 12.323
+avg of time taken for 10 trials of 3000 size graph, without heapq/with heapq: 3.160, without heapq D/with heapq: 3.478, without heapq MC/with heapq: 13.083
+avg of time taken for 10 trials of 6000 size graph, without heapq/with heapq: 3.154, without heapq D/with heapq: 3.485, without heapq MC/with heapq: 13.005
+avg of time taken for 10 trials of 10000 size graph, without heapq/with heapq: 3.115, without heapq D/with heapq: 3.483, without heapq MC/with heapq: 13.053
+avg of time taken for 10 trials of 30000 size graph, without heapq/with heapq: 3.003, without heapq D/with heapq: 3.417, without heapq MC/with heapq: 12.536
+
+using make_mc_graph to generate random graphs
+avg of time taken for 10 trials of 100 size graph, without heapq/with heapq: 2.493, without heapq D/with heapq: 2.095, without heapq MC/with heapq: 17.651
+avg of time taken for 10 trials of 300 size graph, without heapq/with heapq: 2.718, without heapq D/with heapq: 2.230, without heapq MC/with heapq: 20.379
+avg of time taken for 10 trials of 600 size graph, without heapq/with heapq: 2.688, without heapq D/with heapq: 2.311, without heapq MC/with heapq: 20.919
+avg of time taken for 10 trials of 1000 size graph, without heapq/with heapq: 2.671, without heapq D/with heapq: 2.284, without heapq MC/with heapq: 21.120
+avg of time taken for 10 trials of 3000 size graph, without heapq/with heapq: 2.652, without heapq D/with heapq: 2.308, without heapq MC/with heapq: 20.935
+avg of time taken for 10 trials of 6000 size graph, without heapq/with heapq: 2.665, without heapq D/with heapq: 2.331, without heapq MC/with heapq: 21.177
+avg of time taken for 10 trials of 10000 size graph, without heapq/with heapq: 2.642, without heapq D/with heapq: 2.337, without heapq MC/with heapq: 20.602
+avg of time taken for 10 trials of 30000 size graph, without heapq/with heapq: 2.507, without heapq D/with heapq: 2.240, without heapq MC/with heapq: 19.570
+</pre>";comment;11004271;11004214;2012-08-02 01:09:44.421197+00;1;;11035908;100025468;2012-08-02 01:10:47.794423+00;11006299;\N;\N;0;f
+11004311;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/cs215/users/1252/michele-calgaro"" rel=""nofollow""><a href=""http://forums.udacity.com/users/100022094/michele-calgaro""><a href=""http://forums.udacity.com/users/100022094/michele-calgaro"">@Michele Calgaro</a></a></a>: Actually, reduction is introduced exactly at the beginning of unit 6-9. In fact, unit 6-9 title is ""Reduction: Long and Simple path"" so I do not understand why you were so puzzled.</p>";comment;11004309;11004306;2012-08-02 08:02:27.094015+00;1;;\N;100073491;2012-08-02 08:02:27.094015+00;11006351;\N;\N;0;f
+11004316;;cs215 ;100012879;"<p>I think I've got it; instead of calculating the cost of the new possible path by adding the actual path cost and the new weight, I calculate it by choosing the maximum of the actual path cost and the new weight, The distance of the final path is going to be the maximum of is weights, ie: the obscurity value</p>";comment;11004181;11004146;2012-08-02 12:51:58.401748+00;0;;\N;100012879;2012-08-02 12:51:58.401748+00;11006365;\N;\N;0;f
+11004329;;cs215 ;100073491;"<p>Michael, I understand the difference. I was under impression that the first problem is usually called ""k-coloring problem"" and the second ""chromatic number problem"". The first is obviously in NP but it is not so clear about the second one. At the same time I remember that ""chromatic number problem"" was one of the original NP-complete problems presented by Karp in his <a href=""http://www.cs.berkeley.edu/~luca/cs172/karp.pdf"" rel=""nofollow"">seminal paper published in 70s</a> (look at page 95). It is also listed as such in Wikipedia's <a href=""http://en.wikipedia.org/wiki/Karp%E2%80%99s_21_NP-complete_problems"" rel=""nofollow"">list of NP-complete problems</a>. I had this at the back of my mind from prior studies. What I did not realize though that apparently there is a terminological disagreement about what to call a ""chromatic number problem"". As it is obvious from carefully reading Karp's paper what he calls a ""chromatic number problem"" is generally known as a ""k-coloring problem"", i.e. problem of verifying that graph can be colored with k colors. On the other hand, WolframAlfa article states (unambiguously this time) that chromatic number problem is NP-complete and references Skiena's text:  </p>
+<blockquote>
+<p>The chromatic number of a graph $%G$% is also the smallest positive integer $%z$% such <br>
+that the chromatic polynomial $%\pi_{G}(z)&gt;0$%. Calculating the chromatic number of a graph is <br>
+an NP-complete problem (Skiena 1990, pp. 211-212). </p>
+</blockquote>
+<p>It now appears to me that WolframAlfa just screwed this up (I don't have Skiena book handy to verify the source).</p>";comment;11004321;11004305;2012-08-02 15:16:26.654834+00;1;;11036138;100073491;2012-08-02 15:22:23.03094+00;11006386;\N;\N;0;f
+11004347;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/cs215/users/1058/ked4r"" rel=""nofollow""><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a></a> Your reduction to k-colorability only shows that chromatic number problem is NP-hard, it does not prove it is not in NP (not NP-complete). To proof the later you need to show that there is no easy certificate/verifier for a chromatic number problem. Showing that problem is in co-NP also does not prove it is not in NP (as there exist problems which are both in NP and co-NP)</p>";comment;11004312;11004305;2012-08-02 17:36:20.921254+00;0;;11036206;100073491;2012-08-02 17:37:25.083191+00;11006414;\N;\N;0;f
+11004349;;cs215 ;100073491;<p>Yes, we do have computational power. Actually everybody on this forum has this power - it is called WolframAlfa. On a serious note, if you want to implement a program calculating this number you would need to do something more intelligent than just calculating two sides of equation and comparing them. I would not hint more yet.</p>;comment;11004334;11004330;2012-08-02 17:41:54.414581+00;1;;\N;100073491;2012-08-02 17:41:54.414581+00;11006416;\N;\N;0;f
+11004374;;cs215 ;100073491;"<p>Yes, <a href=""http://forums.udacity.com/cs215/users/1025/jeff-blohm"" rel=""nofollow"">Jeff</a> is right - you are on the right path now. Again, just think of the problem as ""calculate a median value of a list with n elements in time linear in n"". Then consider a definition of the median and see if you know of any algorithms that can solve it in linear time. BTW, the median we are talking about in the literature is often called ""sample median"" or ""statistical median"". Here are some details: <a href=""http://mathworld.wolfram.com/StatisticalMedian.html"" rel=""nofollow""></a><a href=""http://mathworld.wolfram.com/StatisticalMedian.html"" rel=""nofollow"">http://mathworld.wolfram.com/StatisticalMedian.html</a></p>";comment;11004358;11004319;2012-08-02 19:15:15.216454+00;0;;\N;100073491;2012-08-02 19:15:15.216454+00;11006453;\N;\N;0;f
+11004375;;cs215 ;100004818;<p>Thank you.  Now I understand how the recursion works.  But this same line still bugs my compiler.  As is, it says that dictionary keys are not subscriptable, and when I try to feed that program a list made up of those dictionary keys, it says that it can only concatenate list (not map) to list.  To have the author of the function answer my question is quite an honor, really.</p>;comment;11004364;11004355;2012-08-02 19:16:15.77663+00;0;;\N;100004818;2012-08-02 19:16:15.77663+00;11006454;\N;\N;0;f
+11004394;;cs215 ;100068905;"<p>A particularly painful thorn in this particular case, since in unit 5.14 Prof. Littman specifically addressed using heaps for Dijkstra and commented, apparently as a hint, that the hardest part would be the 'bookkeeping' that allows heapified Dijkstra code to find a node already in the heap to reduce its value, in constant time.<br>
+I spent a fair amount of time writing code that did this, only to find it ran too slowly to meet all the tests, and much slower than much simpler code based on heapq which ignores all bookkeeping other than preventing 'locked-down' values in final_dict from being subsequently overwritten.  Indeed, keeping track of the location of an entry in a heap managed by heapq appears impossible without losing the speed advantage heapq offers.<br>
+It thus seems, unfortunately, like the hint may have been a red herring, since only heapq-based code seems fast enough to meet all the tests.<br>
+I very much hope this doesn't happen on the final!</p>";comment;11004145;11004145;2012-08-03 00:09:19.318414+00;1;;\N;100068905;2012-08-03 00:09:19.318414+00;11006487;\N;\N;0;f
+11004399;;cs215 ;100068905;"<p>PARTIAL SPOILER:<br>
+Dist_so_far becomes a standard Python list that heapq then manages.<br>
+Heapq eliminates the need for a lot of the code that's in the question.  There's no need for a separate shortest_dist_node method: just use heapq.heappop().  Add a new entry with heapq.heappush(new entry).  Heapq is so efficient there's no need to delete entries related to nodes, or to update them for lower distances (updating is difficult or impossible anyway since heapq doesn't keep track of where old entries are); just add new entries for the same nodes with lower distance values and they will end up higher in the heap.<br>
+With heapq, the entire answer becomes ten lines of code or less, including the import heapq statement.  The only issue is the structure of the entries to use in the dist_so_far array.<br>
+Heapq provides a simpler answer than the question appears to intend, but custom heap code in native Python seems to run too slow for the tests based on larger examples.</p>";comment;11004091;11004064;2012-08-03 00:30:15.22149+00;0;;11036412;100068905;2012-08-03 00:30:35.417065+00;11006493;\N;\N;0;f
+11004415;;cs215 ;100011294;"<p><a href=""http://forums.udacity.com/users/100006021/eli-burmin""><a href=""http://forums.udacity.com/users/100006021/eli-burmin"">@Eli</a></a>, yes, there was lots of room for interpretation.  The additional point is that in many cases there are multiple paths between two nodes that have the same minimum weight.  In this case, the length you need to use is the shortest length of the equal minimum weight paths.  (For some people, this just falls out in the way they wrote their algorithms.  For others, you need to add a couple of checks to make sure you do this.)</p>
+<p>So I would suggest one more line:</p>
+<p>C -&gt; min(len(min_weight_paths)) == len(hop_path)</p>
+<p>It's the same as B except that it includes the possibility of multiple minimum weight paths...</p>";comment;11004138;11004136;2012-08-03 04:44:52.997244+00;0;;\N;100011294;2012-08-03 04:44:52.997244+00;11006521;\N;\N;0;f
+11004440;;cs215 ;100073491;"<p>You are misreading the definition of a long and simple path problem. Michael defines it in the lecture as <i>""given graph G, [...] l and two nodes u and v, is there are a simple path from u to v consisting of l or mode nodes""</i>. Again, <b><i>""l or more nodes""</i></b>. For example, if there is a simple path consisting of exactly two nodes, then by definition, decision problem for any l&lt;=2 shall return TRUE. The only thing that is missing from this definition in my view is a restriction on the domain of possible l values, i.e. can l be a 1, 0 or a negative number? If you look at <code>long_and_simple_decision</code> implementation in the test harness you will find that it returns FALSE for l = 0. This I believe is a mistake, unless we amend definition above to state that l has to be a positive integer, and even in this case it would make more sense to return None or generate an exception if out-of-domain value was passed to the function.</p>
+<p>In your example there is a simple path between 1 and 6 of length 3 ([1, 2, 6]), so decision problem shall return TRUE for l=3,2,...</p>
+<p>[EDIT: here is a wikipedia article describing this problem: <a href=""http://en.wikipedia.org/wiki/Longest_path_problem"" rel=""nofollow""></a><a href=""http://en.wikipedia.org/wiki/Longest_path_problem"" rel=""nofollow"">http://en.wikipedia.org/wiki/Longest_path_problem</a>]</p>";comment;11004412;11004409;2012-08-03 15:15:15.268626+00;0;;11036825;100073491;2012-08-03 15:52:45.842377+00;11006576;\N;\N;0;f
+11004460;;cs215 ;100011294;"<p>Hi <a href=""http://forums.udacity.com/users/100045571/andre"">@Andre</a>,</p>
+<p>Here is a hint to get you closer to your objective.  Your path comparison is wrong at the bottom of your program.  It should be:</p>
+<pre><code>    for char2 in weighted:
+        if len(unweighted[char2]) != len(weighted[char2]):
+</code></pre>
+<p>See?  You are supposed to check the <strong>length</strong> of the shortest unweighted path against the <strong>length</strong> of the shortest path of least weight.  If you change this line, you will see that you are closer to the correct answer.  I haven't gone further on your code than this.  But it's possible that you might sometimes be missing returning the shortest length path in the case where two weighted paths have the same cost.  See the example in my original posting above, where there are two paths of the same weight, but one is shorter than the other... you need to use this shorter path of equal weight for the weighted value.  Hope that sort of makes sense.</p>";comment;11004418;11004136;2012-08-03 22:53:33.623649+00;1;;\N;100011294;2012-08-03 22:53:33.623649+00;11006602;\N;\N;0;f
+11004468;;cs215 ;100044569;"<p>Hey Alex! don't worry about calculus .i am giving you fallowing links ,just check out these lectures on math .i hope you will not face any problem in calculus after that :)(both are on same topic from MIT but professors are different so just check whichever you feel easy and interactive) good luck!</p>
+<p><a href=""http://ocw.mit.edu/courses/mathematics/18-01sc-single-variable-calculus-fall-2010/"" rel=""nofollow"">http://ocw.mit.edu/courses/mathematics/18-01sc-single-variable-calculus-fall-2010/</a></p>
+<p><a href=""http://ocw.mit.edu/courses/mathematics/18-01-single-variable-calculus-fall-2005/"" rel=""nofollow"">http://ocw.mit.edu/courses/mathematics/18-01-single-variable-calculus-fall-2005/</a></p>
+<p>for more on maths you can check Khan academy lectures at this link </p>
+<p><a href=""http://www.khanacademy.org/"" rel=""nofollow"">http://www.khanacademy.org/</a></p>";comment;11000390;11000054;2012-08-04 02:57:56.288608+00;0;;11036972;100044569;2012-08-04 02:58:52.301454+00;11006614;\N;\N;0;f
+11004503;;cs215 ;100073491;"<p>Not necessarily so. First of all NEXP is a better example here. EXP may in fact collapse to NP for what we know. According to <a href=""http://en.wikipedia.org/wiki/Time_hierarchy_theorem"" rel=""nofollow"">Time Hierarchy Theorem</a>, time-bounded hierarchy of complexity classes does not completely collapse so for every deterministic time-bounded complexity class, there is a strictly larger time-bounded complexity class. Another excellent source is <a href=""http://qwiki.stanford.edu/index.php/Petting_Zoo"" rel=""nofollow"">Stanford's Complexity Zoo</a> but you can easily get lost there (I do).</p>
+<p>P.S. In simple terms, for class EXP there is class EEXP that is larger then EXP. Similary, for NEXP, there is NEEXP and so on.</p>
+<p>[EDIT: fixed the link to Time Hierarchy Theorem above].</p>";comment;11004495;11004491;2012-08-04 18:07:37.730268+00;1;;11037140;100073491;2012-08-04 18:22:44.526214+00;11006669;\N;\N;0;f
+11004506;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/cs215/users/1172/kris-king"" rel=""nofollow""><a href=""http://forums.udacity.com/users/100004871/kris-king""><a href=""http://forums.udacity.com/users/100004871/kris-king"">@Kris</a></a></a>, thanks for pointing out the broken link - it is fixed now. As for ""Complexity Zoo"" - yes, it is quite deep and theoretical but I linked above to an introductory article there (it is appropriately called ""Petting Zoo"") which does not require much background. In any case these are very interesting problems which will certainly provide delicious food to anyone with intellectual curiosity even though I prefer to spend my snowy afternoons on [hopefully] even more snowy slopes :).</p>";comment;11004495;11004491;2012-08-04 18:31:34.799608+00;0;;\N;100073491;2012-08-04 18:31:34.799608+00;11006671;\N;\N;0;f
+11004539;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/cs215/users/158/nlgunther"" rel=""nofollow""><a href=""http://forums.udacity.com/users/100068905/nlgunther""><a href=""http://forums.udacity.com/users/100068905/nlgunther"">@nlgunther</a></a></a>: Yes, your code is concise but very slow - 10 times slower then <a href=""http://forums.udacity.com/cs215/questions/4268/ps5-1-priority-queue-implementation-using-heapq?page=1&amp;focusedAnswerId=4345#4345"" rel=""nofollow"">my version</a> on a randomly weighted 2000-node clique:</p>
+<pre><code>def testN():
+    n = 2000
+    G = {}
+    for node1 in range(n):
+        for node2 in range(n):
+            if node1 != node2:
+                make_link(G, node1, node2, random.randrange(n))
+
+    a = datetime.datetime.now() 
+    dist = dijkstra(G, 50)
+    print(datetime.datetime.now()-a)
+
+for _ in range(3):
+    testN()
+</code></pre>
+<p>I am not even sure your code is $%\Theta(n\log(n))$%. Can you show a proof of time complexity? Or, better yet, think how to fix your code to improve running time (it is a quite easy fix, really).</p>";comment;11004268;11004268;2012-08-05 03:09:32.359334+00;0;;11037302;100073491;2012-08-05 03:09:56.031206+00;11006728;\N;\N;0;f
+11004543;;cs215 ;100026104;"<p><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3""><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3"">@D</a></a> Kulakovsky : I appreciate the response.  I didn't actually get around to the marvel graph as of yet, so I will have to look into it...</p>
+<p>Do you know if there are any test cases floating around that I can work with for ps5-1?  Maybe that might help point me in the right direction.</p>";comment;11004540;11004538;2012-08-05 03:45:16.339901+00;0;;\N;100026104;2012-08-05 03:45:16.339901+00;11006735;\N;\N;0;f
+11004547;;cs215 ;100026104;"<p><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3""><a href=""http://forums.udacity.com/users/100073491/dmitry-kulakovsky-3"">@D</a></a> Kulakovsky : After I reduced function calls, my updated code was accepted; however, I am not sure it wasn't due to some sort of server-side fluke.</p>";comment;11004540;11004538;2012-08-05 06:22:08.262166+00;0;;11037346;100026104;2012-08-05 06:22:38.035587+00;11006748;\N;\N;0;f
+11004599;;cs215 ;100002476;"<p>I did it (It late, but earlier at me didn't turn out)<br>
+My list:</p>
+<p>1 ""Tatasciore, Fred"", 3.61746912024<br>
+ 2 ""Jackson, Samuel L."", 3.69914292917<br>
+ 3 ""Welker, Frank"", 3.71477186791<br>
+ 4 ""Harnell, Jess"", 3.73443408117<br>
+ 5 ""Willis, Bruce"", 3.74401310814<br>
+ 6 ""Hanks, Tom"", 3.74628182506<br>
+ 7 ""Blum, Steve (IX)"", 3.7636753214<br>
+ 8 ""Papajohn, Michael"", 3.77123771112<br>
+ 9 ""Voight, Jon"", 3.77148979077<br>
+10 ""Starr, Arne"", 3.77224602975<br>
+11 ""Damon, Matt"", 3.7760272246<br>
+12 ""Cruise, Tom"", 3.77627930426<br>
+13 ""Downes, Robin Atkin"", 3.77703554323<br>
+14 ""Abernathy, Don"", 3.77829594152<br>
+15 ""Wilson, Owen (I)"", 3.78207713638<br>
+16 ""Pitt, Brad"", 3.78711872952<br>
+17 ""Baldwin, Alec"", 3.78888328712<br>
+18 ""Diaz, Cameron"", 3.78963952609<br>
+19 ""North, Nolan"", 3.79392488026<br>
+and <br>
+20 ...</p>
+<p>but I have ""Try again"" :-(<br>
+This list is true, isn't it?</p>";comment;11003333;11003318;2012-08-06 17:34:47.433856+00;0;;\N;100002476;2012-08-06 17:34:47.433856+00;11006849;\N;\N;0;f
+11004607;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/users/100068598/ivan-ogassavara""><a href=""http://forums.udacity.com/users/100068598/ivan-ogassavara"">@Ivan</a></a>, you do not need to calculate an approximation in 5-18 but the exact expected value. See this thread for more info:<br>
+<a href=""http://forums.udacity.com/cs215/questions/3710/spoiler-bug-in-randomized-clustering-coefficient/3720"" rel=""nofollow""></a><a href=""http://forums.udacity.com/cs215/questions/3710/spoiler-bug-in-randomized-clustering-coefficient/3720"" rel=""nofollow"">http://forums.udacity.com/cs215/questions/3710/spoiler-bug-in-randomized-clustering-coefficient/3720</a></p>";comment;11004596;11004126;2012-08-06 18:33:08.11017+00;0;;\N;100073491;2012-08-06 18:33:08.11017+00;11006860;\N;\N;0;f
+11004632;;cs215 ;100068905;"<p>I just wanted something very short that could pass all the tests.  Once one gives up on a custom heap structure, simplicity seems like a virtue.  I don't think my code is clever, more obvious than anything else - my personal interests are closer to differential topology, dynamical systems and stochastic processes than to CS.  If there's an 'idea' at all, it's that letting a heap grow by adding smaller stuff at the top doesn't create that much extra work because, since you always add smaller stuff, it's only the top of the heap pyramid that matters.  It's probably possible to write down conditions under which you can just delete the entire bottom of the pyramid; I don't know. I'm a bit too busy at the moment, sadly. <br>
+I wondered why you wrote additional methods.  Perhaps it's to get the 10x speed advantage?  In any case, I welcome your suggestion on speed improvement, and am grateful for your enthusiasm about the course material and for sharing your work!</p>";comment;11004268;11004268;2012-08-06 23:40:40.844472+00;0;;11037879;100068905;2012-08-07 00:10:55.489204+00;11006910;\N;\N;0;f
+11004642;;cs215 ;100025468;"<p><a href=""http://forums.udacity.com/users/100026104/anthony-r-pace""><a href=""http://forums.udacity.com/users/100026104/anthony-r-pace"">@Anthony</a></a>: I wrote some code that the grader accepts and is a correct implementation (i.e. passes the tests). The code is here: <a href=""http://forums.udacity.com/cs215/questions/4538/solution-to-ps5-1-without-heapq-edit-it-was-accepted-multiple-times-so-apparently-not-a-fluke/4633"" rel=""nofollow"">http://forums.udacity.com/cs215/questions/4538/solution-to-ps5-1-without-heapq-edit-it-was-accepted-multiple-times-so-apparently-not-a-fluke/4633</a></p>";comment;11004538;11004538;2012-08-07 00:56:23.787057+00;0;;\N;100025468;2012-08-07 00:56:23.787057+00;11006921;\N;\N;0;f
+11004647;;cs215 ;100025468;"<p>Actually, my code is about 30% faster than yours on sparser graphs (i.e. 2n to 5n edges). The make_random_graph is the graph generator used by the grader. Below is my comparison against different graph generation procedures including your clique graph tester. I don't think the grader has changed since my old code is not accepted.</p>
+<p>I compared my code against heapq, Michele's and your dijkstra implementation. My test suite is here: <a href=""http://forums.udacity.com/cs215/questions/4214/spoiler-ps5-1-solution-discussion/4282"" rel=""nofollow"">http://forums.udacity.com/cs215/questions/4214/spoiler-ps5-1-solution-discussion/4282</a></p>
+<pre>using make_mc_graph to generate random graphs
+10 trials:: size=100, avg time: 0.00103, mine/MC: 0.891, mine/D: 0.716, mine/heapq: 1.215
+10 trials:: size=300, avg time: 0.00347, mine/MC: 0.875, mine/D: 0.697, mine/heapq: 1.270
+10 trials:: size=600, avg time: 0.00761, mine/MC: 0.873, mine/D: 0.688, mine/heapq: 1.313
+10 trials:: size=1000, avg time: 0.01333, mine/MC: 0.858, mine/D: 0.678, mine/heapq: 1.318
+10 trials:: size=3000, avg time: 0.04617, mine/MC: 0.877, mine/D: 0.682, mine/heapq: 1.379
+10 trials:: size=6000, avg time: 0.10244, mine/MC: 0.888, mine/D: 0.689, mine/heapq: 1.388
+10 trials:: size=10000, avg time: 0.18664, mine/MC: 0.870, mine/D: 0.676, mine/heapq: 1.371
+10 trials:: size=30000, avg time: 0.66205, mine/MC: 0.887, mine/D: 0.691, mine/heapq: 1.407
+
+using make_random_graph to generate random graphs
+10 trials:: size=100, avg time: 0.00080, mine/MC: 0.847, mine/D: 0.703, mine/heapq: 1.384
+10 trials:: size=300, avg time: 0.00276, mine/MC: 0.851, mine/D: 0.680, mine/heapq: 1.518
+10 trials:: size=600, avg time: 0.00617, mine/MC: 0.851, mine/D: 0.667, mine/heapq: 1.580
+10 trials:: size=1000, avg time: 0.01119, mine/MC: 0.850, mine/D: 0.673, mine/heapq: 1.648
+10 trials:: size=3000, avg time: 0.03998, mine/MC: 0.861, mine/D: 0.677, mine/heapq: 1.667
+10 trials:: size=6000, avg time: 0.08569, mine/MC: 0.879, mine/D: 0.675, mine/heapq: 1.831
+10 trials:: size=10000, avg time: 0.14992, mine/MC: 0.863, mine/D: 0.664, mine/heapq: 1.778
+10 trials:: size=30000, avg time: 0.52951, mine/MC: 0.877, mine/D: 0.670, mine/heapq: 1.789
+
+using make_cliq_graph to generate random graphs
+10 trials:: size=100, avg time: 0.00371, mine/MC: 0.966, mine/D: 0.860, mine/heapq: 1.061
+10 trials:: size=200, avg time: 0.01273, mine/MC: 0.998, mine/D: 0.889, mine/heapq: 1.073
+10 trials:: size=1000, avg time: 0.38254, mine/MC: 1.022, mine/D: 0.945, mine/heapq: 1.065
+10 trials:: size=2000, avg time: 1.62370, mine/MC: 1.031, mine/D: 0.978, mine/heapq: 1.097
+</pre>";comment;11004633;11004538;2012-08-07 02:34:22.133804+00;0;;11037928;100025468;2012-08-07 02:36:21.308927+00;11006931;\N;\N;0;f
+11004671;;cs215 ;100022094;"<p>Hi <a href=""http://forums.udacity.com/users/100004871/kris-king""><a href=""http://forums.udacity.com/users/100004871/kris-king"">@Kris</a></a>,<br>
+<br>thanks for sharing your opinion as well. Basically what you say is to just to repeat the same proof that Michael did in the video when considering planar graphs, But (without repeating all my reasoning again) I think it is an unnecessary thing to do, since the original proof for any graph would suffice.<br>
+<br>Now I have become really curios to see what is the right way of thinking, because if I am wrong it means I have completely misunderstood unit 6 and problem hardness concept in general and in such case I would need to do more studies on the subject.<br>
+<br>I really hope ""<a href=""http://forums.udacity.com/users/100103101/michael-littman""><a href=""http://forums.udacity.com/users/100103101/michael-littman"">@Michael Littman</a></a>"" steps in and clears all my (our) doubts</p>";comment;11004666;11004500;2012-08-07 14:12:56.737528+00;0;;11038056;100022094;2012-08-07 14:14:18.453166+00;11006979;\N;\N;0;f
+11004678;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/users/100022094/michele-calgaro""><a href=""http://forums.udacity.com/users/100022094/michele-calgaro"">@Michele</a></a>, please answer two simple questions:<br>
+1. What is the hardness of 3-coloring of a chain graph (hint: all chains are 3-colorable)?<br>
+2. Can a constant-time problem be NP-hard?</p>";comment;11004667;11004500;2012-08-07 15:21:26.988457+00;0;;11038082;100073491;2012-08-07 15:22:03.814881+00;11006995;\N;\N;0;f
+11004713;;cs215 ;100022094;"<p>Hi <a href=""http://forums.udacity.com/users/100012879/persep""><a href=""http://forums.udacity.com/users/100012879/persep"">@PerseP</a></a>,<br>
+the solution D Kulakovsky posted above is exactly the way I solved the problem. Once you get to that disequality, you can find the correct minimum integer value (bigger than 1) that solves the problem by testing with different numbers. At some point you will find a couple of values (say n_0, n0+1) such that for n0 the disequality is not satisfied but for n0+1 it is. The value n0+1 is the value required</p>";comment;11004675;11004569;2012-08-08 00:59:44.059632+00;0;;11038278;100022094;2012-08-08 01:00:23.605614+00;11007068;\N;\N;0;f
+11004716;;cs215 ;100025468;"<p><a href=""http://forums.udacity.com/users/100012879/persep""><a href=""http://forums.udacity.com/users/100012879/persep"">@PerseP</a></a>: On wolfram you can use: <a href=""http://www.wolframalpha.com/input/?i=solve+n%2Flog%28n%29+%3D+100%2Flog%281.1%29+for+n"" rel=""nofollow"">http://www.wolframalpha.com/input/?i=solve+n%2Flog%28n%29+%3D+100%2Flog%281.1%29+for+n</a> </p>
+<p>This will give n in floating point. You can use ceiling of the larger number to get the integral solution.</p>";comment;11004675;11004569;2012-08-08 01:12:26.598702+00;1;;\N;100025468;2012-08-08 01:12:26.598702+00;11007071;\N;\N;0;f
+11004730;ps6-4 grader should also accept another solution (SPOILER!!);ps6-4 spoiler error grader m-48403770 cs215;100022094;"<p>Hi there,<br>
+the grader currently accepts the following solution:<br>
+</p><pre>n=2x+6y+3<br>
+m=3x+13y+3</pre><br>
+This is correct if we use a gadget as described <a href=""http://www.cs.princeton.edu/courses/archive/spr07/cos226/lectures/23Reductions.pdf"" rel=""nofollow"">here(slide 32,36)</a> which has 6 nodes and 13 edges.<br>
+<br>But we could use a different gadget (the same shown by Michael in the video and also described <a href=""http://www.cs.uiuc.edu/class/fa08/cs473/Lectures/lecture24.pdf"" rel=""nofollow"">here (slide 72)</a> which has 6 nodes and 12 edges. In this case the answer would be:<br>
+<pre>n=2x+6y+3<br>
+m=3x+12y+3</pre><br>
+but the grader does not accept that.<br>
+<br>IMO, the grader should be fixed.<p></p>";question;\N;\N;2012-08-08 06:56:09.654082+00;0;;11038362;100044380;2012-08-24 19:24:41.682925+00;11007094;\N;\N;524;f
+11004734;;cs215 ;100022094;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a><br>
+<br>obviously I am not an expert, so I don't dare saying Skiena is right or wrong.<br>
+<br>Accordingly to what he says in his book, given a graph and a value k, it is possible to verify if k is the chromatic number of a graph in expected constant time. Therefore it would mean the problem is in NP.<br>
+<br>Perhaps that ""expected"" could make a difference or not, but I believe Skiena is a much more reliable source than myself.<br>
+<br><br>
+<br>EDIT: on second thought, if the worst case is exponential, that would mean that at least one certificate could not be verified in poly time, which would make the problem not be in NP. And in such case either my interpretation of the book or the book itself is wrong.</p>";comment;11004731;11004305;2012-08-08 08:04:28.85856+00;0;;11038375;100022094;2012-08-08 08:09:15.483216+00;11007100;\N;\N;0;f
+11004741;;cs215 ;100022094;"<p>On the way home I have re-thought my logic above and found that it is wrong.<br>
+<br>The reason is that given a certificate for k-colorability, we can not use that to verify k-colorability for all positive integers smaller than that value of k. We would need to check all possibilities for smaller value of k, So my logic was wrong</p>";comment;11004731;11004305;2012-08-08 12:52:42.905614+00;0;;\N;100022094;2012-08-08 12:52:42.905614+00;11007141;\N;\N;0;f
+11004747;;cs215 ;100008880;"<p>Udacity's staff is a subset of it's stuff! Completely agree with epsylon though, having taken a few udacity classes now starting with cs373 in February I'm constantly amazed at how much more simple complicated ideas can be presented through Udacity's platform/format.</p>
+<p>Also great song, your vocals were pretty good Michael.</p>";comment;11004744;11004709;2012-08-08 15:06:13.602239+00;1;;\N;100008880;2012-08-08 15:06:13.602239+00;11007148;\N;\N;0;f
+11004752;;cs215 ;100073491;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a>: Are you saying that you can prove that chromatic number problem is not in NP? I want to see a proof or at least a sketch then ;).</p>
+<p>In the meantime I will repeat my explanation why I highly doubt that you can prove it. Let's assume that P=NP. From <a href=""http://aleph.straylight.co.uk/coNP.pdf"" rel=""nofollow"">it follows that co-NP=co-P=P=NP</a>. Since chromatic number problem is in co-NP, it follows that it is in NP. Now, if you can prove that chromatic number is not in NP we will arrive at contradiction and conclude that P!=NP.  </p>
+<p>The bottom line is that it is very hard to prove that co-NP problem is not in NP. The correct answer to ""whether chromatic number problem is in NP?"" is ""we do not know"".</p>";comment;11004731;11004305;2012-08-08 16:33:44.913697+00;0;;11038506;100073491;2012-08-08 16:56:38.256965+00;11007160;\N;\N;0;f
+11005286;"finding out who started a rumor by ""reverse search""  how might this work?";cs215 discussion;100068128;"<p>from slashdot.org  <a href=""http://paritynews.com/science/item/168-researchers-develop-algorithm-to-trace-source-of-computer-virus-epidemics-more"" rel=""nofollow"">http://paritynews.com/science/item/168-researchers-develop-algorithm-to-trace-source-of-computer-virus-epidemics-more</a></p>
+<p>do you think this is a 'new' algorithm or a variant of something we've already been exposed to?</p>";question;\N;\N;2012-08-12 13:53:00.488821+00;0;;\N;100103101;2012-08-12 16:58:39.390821+00;11007933;\N;\N;154;f
+11005475;Free tools to help find social media data about the US presidential election.;cs215 discussion meta;100004818;"<p><a href=""http://www.computerworld.com/s/article/print/9230280/Analytics_tool_helps_voters_search_social_media_streams_of_Obama_Romney_campaigns?taxonomyName=Business%20Intelligence/Analytics&amp;taxonomyId=9"" rel=""nofollow"">Analytics tool helps voters search social media streams of Obama, Romney campaigns</a></p>";question;\N;\N;2012-08-14 21:07:17.20898+00;1;;11041172;100004818;2012-08-14 21:07:17.20898+00;11008196;\N;\N;124;f
+11005918;Mistake in the code for Unit 1 Question 14;cs215 unit1-14 m-48717376 error;100043008;"<p>import math</p>
+<p>def time(n):<br>
+    """""" Return the number of steps <br>
+    necessary to calculate<br>
+<code>print countdown(n)</code>""""""<br>
+    steps = 0<br>
+    # YOUR CODE HERE<br>
+    return steps</p>
+<p>def countdown(x):<br>
+    y = 0<br>
+    while x &gt; 0:<br>
+        x = x - 5<br>
+        y = y + 1<br>
+    print y    ------------------- THIS SHOULD BE RETURN Y</p>
+<p>print countdown(50)</p>";question;\N;\N;2012-08-19 12:18:51.417597+00;3;;11042691;100262513;2013-01-02 05:43:12.004022+00;11008781;\N;\N;359;f
+12000880;Other related materials;cs258 discussion resource;100016366;"<p>Was just looking looking around for some other materials to study while taking this course, looks like there's some useful stuff on <a href=""http://nsdl.org/search/results?q=software%20testing"" rel=""nofollow"">NDSL</a>, anyone got anything else useful?</p>";question;\N;\N;2012-06-29 18:50:20.838403+00;1;;12042976;100016366;2012-06-29 18:50:20.838403+00;12005309;\N;\N;186;f
+12000997;unit1-17 Answer Problems;spoiler unit1-18 unit1-17 m-48557324 cs258;100033186;"<p>There are a couple of issues with the answer for the question in Unit 1.17 as of 2012-06-30T17:40Z: sqrt(9) = ?  a) 3  b) -3. First, it's a checkbox answer, not a text input box as the video claims. Second, while the video says that any answer is correct, my stab at a specification was just a) 3 (I had in the back of my mind the assertion about the result of square root being &gt;= 0 from an earlier unit) but I was told that was wrong, and was told I was correct only on my second try, after selecting both a) and b).</p>
+<p>Unit 1.18 has a similar checkbox versus input box issue. Also, it won't accept ""crash the machine"" as an appropriate reaction, though I think it's not an inappropriate result if this were, say, a C function with the typical claim that behaviour is ""undefined"" for inappropriate input values. Perhaps I just take a little too seriously the C standard dictum that ""undefined behaviour"" really does mean that the program may do absolutely anything....</p>";question;\N;\N;2012-06-30 17:42:02.382067+00;0;;12009538;100074292;2012-08-03 09:40:55.905243+00;12001268;\N;\N;257;f
+12001708;Lessons in Testing;cs258 discussion resource;100012879;"<p>From the EuroPython 2012 Conference in Italy by David Cramer: <a href=""http://www.youtube.com/watch?v=garsUmsZIac&amp;feature=plcp"" rel=""nofollow"">Video</a></p>
+<p>They have a lot of interesting <a href=""https://ep2012.europython.eu/p3/schedule/ep2012/"" rel=""nofollow"">talks about Python</a> and I think they'll be uploading them soon</p>";question;\N;\N;2012-07-05 16:58:19.579949+00;1;;12042887;100012879;2012-07-05 17:08:35.947673+00;12005220;\N;\N;156;f
+12001843;Getting Started Testing your Python;cs258 discussion resource;100012879;"<p>This is made by the same author of coverage.py and it's a talk about how to get started testing your Python code. This is designed to be useful for complete beginners, and to provide some meat for people who already have some testing underway. it's <a href=""http://nedbatchelder.com/text/starttest.html"" rel=""nofollow"">here</a></p>";question;\N;\N;2012-07-07 14:09:44.112217+00;1;;12042886;100012879;2012-07-07 14:09:44.112217+00;12005219;\N;\N;182;f
+12001965;;cs258 ;100064810;"<p>Why brute force MC/DC can be troublesome. </p>
+<p>The age of the universe is supposed to be approximately around 4.339â€‰Â±â€‰0.035 Ã— 10E17 seconds (13.75 billion years).</p>
+<p>If you have to run a test on an exhaustive combination of say typically some 64 variables at  assuming the test requires sufficient time to setup and teardown, especially on low speed embedded systems, with an average 1 second each: 2^64 = 1.84467441 Ã— 10E19, you would be older than the universe,  by the time the test results are out.</p>
+<p>So ideally you're always looking for a minimum class of tests cases, that presumably covers and eliminates a whole lot of tests cases, due to redundancy. Of course finding them is not easy. I have tried unoptimized tests before, without realizing the crazy ramifications.</p>";comment;12001933;12001931;2012-07-09 06:40:23.868685+00;0;;\N;100064810;2012-07-09 06:40:23.868685+00;12002630;\N;\N;0;f
+12001966;;cs258 ;100095853;"<p>other options:</p>
+<pre><code>download the youtube videos, play and slow it down using VLC player.
+
+I think there is some info on the internet regarding slowing down the video playback on youtube (they're mentioning something about HTML5.) haven't tried this though, maybe you can give it a try.
+</code></pre>";comment;12001912;12001909;2012-07-09 07:46:43.378905+00;0;;\N;100095853;2012-07-09 07:46:43.378905+00;12002632;\N;\N;0;f
+12001968;;cs258 ;100090973;<p>You can read the wiki, it has the whole class texted</p>;comment;12001912;12001909;2012-07-09 08:41:42.654971+00;0;;\N;100090973;2012-07-09 08:41:42.654971+00;12002635;\N;\N;0;f
+12001969;;cs258 ;100001468;<p>You shouldn't have to use <code>shell=True</code>, as you point out, it is unsafe... do you get an error when you try it without?</p>;comment;12001963;12001922;2012-07-09 08:57:32.853356+00;0;;\N;100001468;2012-07-09 08:57:32.853356+00;12002636;\N;\N;0;f
+12002015;;cs258 ;100007190;"<p>This is my code </p>
+<p>import math</p>
+<h1>Insert a bug of your choosing into the stats function.</h1>
+<p>def stats(lst):<br>
+    min = None<br>
+    max = 0<br>
+    freq = {}<br>
+    for i in lst:<br>
+        i = abs(i)<br>
+        if min is None or i &lt; min:<br>
+            min = i<br>
+        if max is None or i &gt; max:<br>
+            max = i<br>
+        if i in freq:<br>
+           freq[i] += 1<br>
+        else:<br>
+            freq[i] = 1<br>
+    lst_sorted = sorted(lst)<br>
+    if len(lst_sorted)%2 == 0:<br>
+        middle = len(lst_sorted)/2<br>
+        median = (lst_sorted[middle] + lst_sorted[middle-1]) / 2<br>
+    else:<br>
+        median = lst_sorted[len(lst_sorted)/2]<br>
+    mode_times = None<br>
+    for i in freq.values():<br>
+        if mode_times is None or i &gt; mode_times:<br>
+            mode_times = i<br>
+    mode = []<br>
+    for (num, count) in freq.items():<br>
+        if count == mode_times:<br>
+            mode.append (num)<br>
+    print ""list = "" + str(lst)<br>
+    print ""min = "" + str(min)<br>
+    print ""max = "" + str(max)<br>
+    print ""median = "" + str(median)<br>
+    print ""mode(s) = "" + str(mode)</p>
+<h1>test1 should achieve full statement coverage of</h1>
+<h1>the stats function without triggering the bug</h1>
+<h1>you've inserted into the stats function.</h1>
+<p>def test1():<br>
+    ###Your test1 code here. Depending on what <br>
+    # bug you choose to put in the stats function, <br>
+    # you may or may not need to modify test1.<br>
+    l = [31,32,33,33,34]<br>
+    stats(l)<br>
+    print<br>
+    l = [31,32,33,33]<br>
+    stats(l)<br>
+    print</p>
+<h1>test2 should also achieve full statement coverage</h1>
+<h1>of the stats function, but should trigger the bug</h1>
+<h1>you've inserted into the stats function.</h1>
+<p>def test2():<br>
+    ###Your test2 code here.<br>
+    l = [-33,-34]<br>
+    stats(l)    </p>
+<p>test1()<br>
+test2()</p>
+<p>But I have this error:</p>
+<p>Incorrect. You didn't enter the if statement:</p>
+<pre><code>                    if i in freq:
+
+                        freq[i] += 1
+</code></pre>
+<p>Can I have some advices???</p>";comment;12001565;12001498;2012-07-09 20:08:52.196424+00;0;;\N;100007190;2012-07-09 20:08:52.196424+00;12002699;\N;\N;0;f
+12002028;;cs258 ;100018920;"<p>For a question that you ask, it is the number of answers you accept (click the check mark) divided by the number of questions you ask. So if you ask one question and accept one answer your accept rate is 100%. If you accept more than one answer for your question then the accept rate can be greater than 100%. If you ask a question but never accept an answer your accept rate is 0%.</p>
+<p>In my case I have asked 3 questions, this one, which really requires no answer, one for which I accepted 29 answers, and one which did not get any answers. So 29/3 = 9.667 = 966%. I would not include the questions which have no answers in the calculation, but their algorithm does.</p>";comment;12002010;12002010;2012-07-09 22:52:59.386648+00;0;;12023367;100018920;2012-07-09 23:04:01.959198+00;12002715;\N;\N;0;f
+12002093;;cs258 ;100016366;"<p>Thanks for this answer, I almost took the assertion out as if we didn't have digits we would exit any way with a typeerror at int(n[d]), I didn't because of this in the specification:</p>
+<pre><code>is_luhn_valid takes a credit card number as input
+</code></pre>
+<p>which doesn't specify how that is formatted and often you'll see these with spaces or other characters breaking the number into groups of 4, I removed spaces and really should have done the same for hyphens the 2 most common. By leaving it in it makes it clear that I'm only really expecting to see digits.</p>
+<p>I take your point about reversing the number and the specification as we were asked to implement the luhn algorithm as specified, I was taking the 'lazy coder' approach (was that this class or some other - 262?).</p>";comment;12002085;12002046;2012-07-10 18:34:49.884357+00;0;;\N;100016366;2012-07-10 18:34:49.884357+00;12002805;\N;\N;0;f
+12002102;;cs258 ;100090161;"<p>Yes, perhaps your code looks different because in some ways you adhered more closely to the specification or assumed less than most, including me. Distrusting input data is definitely a healthy instinct to have.</p>
+<p>Rereading the last part of the spec:<br>
+</p><pre><code><br>
+    # is_luhn_valid takes a credit card number as input and verifies <br>
+    # whether it is valid or not. If it is valid, it returns True, <br>
+    # otherwise it returns False</code></pre><br>
+It seems anything that is not Luhn checkable should be considered invalid and return False.  Therefore, maybe the best thing to do would be:<br>
+<pre><code>if not n.isidigit():<br>
+    return False</code></pre><p></p>
+<p>Of course the correct answer in the real world is </p><blockquote>d) none of the above. Get a refined specification.</blockquote> Unfortunately, loose specs seem to be the norm rather than the exception so this is at least one way Udacity is preparing students for the real world.<p></p>";comment;12002085;12002046;2012-07-10 19:26:50.108389+00;3;;12023825;100090161;2012-07-10 19:33:00.731132+00;12002822;\N;\N;0;f
+12002114;;cs258 ;100118836;"<p>Initially I did the doubling calculation each time. Luhn's original patent gave me the clue to make it even shorter. Precalculating the doubled digits (or as he called them, the substitution digits) in their 'permuted order' lets me use one array lookup instead of several operations and a branch.</p>
+<pre>def is_luhn_valid(n):
+    digits = str(n)
+    doubled = [0,2,4,6,8,1,3,5,7,9]
+    checksum = 0
+    for d in digits[-1::-2] :  checksum += int(d)
+    for d in digits[-2::-2] :  checksum += doubled[int(d)]
+    return (checksum%10) == 0
+</pre>";comment;12002064;12002046;2012-07-10 20:53:07.37702+00;8;;12023861;100118836;2012-07-10 20:53:30.636105+00;12002835;\N;\N;0;f
+12002152;;cs258 ;100025197;"<p>and since we're all posting our code, here's mine:</p>
+<pre><code>def double(x):
+    x *= 2
+    if x &gt; 9:
+       x -= 9
+    return x
+
+def luhn_algorithm(n):
+    lst_n = map(int, str(n))
+    # default for even numbers
+    start = len(lst_n) % 2
+    for i in range(start, len(lst_n), 2):
+        lst_n[i] = double(lst_n[i])
+    return sum(lst_n) % 10
+</code></pre>";comment;12002151;12002030;2012-07-11 07:09:49.278349+00;0;;12024560;100025197;2012-07-11 07:10:53.157388+00;12002894;\N;\N;0;f
+12002160;;cs258 ;100025197;"<p>Honestly, I think it's something you pick up with experience with Python in particular. Two for loops or a different slicing operation might be similarly confusing. But, as <a href=""http://forums.udacity.com/users/100001468/andy-hayden""><a href=""http://forums.udacity.com/users/100001468/andy-hayden"">@Andy</a></a> said, it's only because they named the variables well).</p>
+<p>Another example of an idiom that can be confusing at first but often more expressive are statements like the following:</p>
+<pre><code>fn(some_element) or other_fn(some_element)
+
+q is not None and fn(q) or 5
+</code></pre>
+<p>(the first line only evaluates the or expression if the first part evaluates to falsy. the second only evaluates q if q is not None and otherwise returns 5).</p>
+<p>It's a really nice way to put your code, because it lets you combine what otherwise would be multiple if statements into one, but it also can be confusing if you aren't used to reading it. (though because Python uses ""or"" instead of ""||"", etc, makes it a lot easier to read).</p>";comment;12002124;12002116;2012-07-11 08:09:56.16454+00;1;;\N;100025197;2012-07-11 08:09:56.16454+00;12002902;\N;\N;0;f
+12002176;;cs258 ;100090161;"<p>There are still separate cases for the odd and even elements here so I don't think your explanation for the shortness of the code can be correct. In the for loop<br>
+</p><pre><code>if d % 2:<br>
+else:</code></pre><br>
+seems to be separating the list into odd and even elements.<p></p>
+<p>At best reversing is saving us one line of code. We could write<br>
+</p><pre><code>double_offset = len(n) % 2</code></pre><br>
+and then in the for loop write<br>
+<pre><code>if d % 2 == double_offset:</code></pre><br>
+I think it is questionable whether the ""cleverness"" of reversing the list to save a line of code is worth it. It arguably hurts the overall readability of the code and introduces a performance penalty by needlessly reversing the list. Is saving one line of code really such a great bargain here?<p></p>";comment;12002048;12002046;2012-07-11 14:16:58.442737+00;1;;\N;100090161;2012-07-11 14:16:58.442737+00;12002929;\N;\N;0;f
+12002179;;cs258 ;100018920;"<p>I can see the merit in Andy's formula. With a higher than 100% accept rate it would be possible to never accept another answer yet keep a good accept rate.   In Jeffreys formula  (questions-total) would include unanswered questions, shouldn't that be (number of questions with at least one answer)?</p>
+<p>All of this discussion should probably be moved to the <a href=""http://forums.udacity.com/technical-support"" rel=""nofollow"">technical support forum.</a></p>";comment;12002061;12002061;2012-07-11 16:11:15.807677+00;0;;12024720;100018920;2012-07-11 16:12:21.044125+00;12002934;\N;\N;0;f
+12002187;;cs258 ;100016314;"<p>Hi <a href=""http://forums.udacity.com/users/100001468/andy-hayden""><a href=""http://forums.udacity.com/users/100001468/andy-hayden"">@Andy Hayden</a></a>, what is your %s, ... %q doing in the string following the assert?</p>
+<p>You have hit on a very important point - maintaining the test suite/test framework. If you have a large suite of individual test cases, and the spec changes, there is lots of rework to update the individual tests. And you might be working in a situation where the spec changes frequently, or maybe the spec is poorly defined and there are many 'clarifications' to the spec that effectively look like spec changes. If you have a random test framework that either does the testing or directly generates test cases, it is much less work to modify the random framework and re-generate as many tests as you want. There are also many 'off-the-shelf' tools to help you maintain and modify your random program (version control tools, lint tools, etc), since it's ""just"" another program.</p>
+<p>Also, as a nice bonus, it's alot more fun! One of these random frameworks is quite a fun, very creative, and challenging program to create and use. And when the work is more fun/creative/challenging, it's easier to attract/recruit/hire people into those testing positions. This last sentence is important to the 'pointy haired manager' types (like me) out there.</p>";comment;12002175;12001271;2012-07-11 17:17:55.381239+00;0;;\N;100016314;2012-07-11 17:17:55.381239+00;12002944;\N;\N;0;f
+12002195;Random tester for Queue;unit3-26 m-48420261 cs258;100000494;"<p>My tester finish ok but when i submit i get the message:</p>
+<pre><code>""You should test the enqueue method on more inputs.""
+</code></pre>
+<p>Does this mean that i should test on different kinds of inuts ie. ints, floats, chars and so on?</p>";question;\N;\N;2012-07-11 18:31:49.570546+00;0;;\N;100084409;2012-07-14 20:50:34.904506+00;12002953;\N;\N;320;f
+12002202;;cs258 ;100016366;"<p><a href=""http://forums.udacity.com/users/100090161/nathan""><a href=""http://forums.udacity.com/users/100090161/nathan"">@Nathan</a></a>, That looks like really great feedback, I haven't the time right now to read and digest it all but I will definitely revisit this. </p>
+<p>So far:<br>
+I agree entirely with your points on the first line (commented and complex), I considered it a trivial operation in the context of the function so didn't want to distract from where the real work was done. Python after all is supposed to be self documenting so this was probably not a great decision.</p>
+<p>Re-using parameters, real bad habit I need to break. Will bite me one day I'm sure.</p>
+<p>Seriously thanks for the comments I'm learning as much from this sort of feedback as I am from the classes.</p>";comment;12002201;12002046;2012-07-11 20:35:59.582257+00;0;;12024808;100016366;2012-07-11 20:38:35.037392+00;12002962;\N;\N;0;f
+12002205;;cs258 ;100090161;"<p>I'm glad you find it helpful. The most common complaint I hear about CS grads from traditional universities is that they don't know how to code straight out of college. Unfortunately, my experience with Udacity so far indicates they are reinforcing this stereotype. By his own admission Professor Regehr's example solution is crap.</p>
+<p>Computer science and computer programming are not the same thing but there is no reason computer science couldn't be taught with examples that demonstrate good programming.</p>
+<p>I still cringe every time I think of Sean Bennett's challenge to try and beat his lines of code. Unless you are Alan Kay, focusing on lines of code is almost always the wrong path to quality.</p>
+<p>I think it would be great if the community reviewed a few code examples for each problem set. After the community discussed and refined the code the best solutions could be saved and presented as official answers.  I think this would be better than the shoot from the hip stuff the instructors are doing right now. Ultimately, it should involve less work for the professors and offer higher quality to the students.</p>";comment;12002201;12002046;2012-07-11 22:12:57.241318+00;2;;\N;100090161;2012-07-11 22:12:57.241318+00;12002965;\N;\N;0;f
+12002212;;cs258 ;100025197;"<p>I debated writing a testing wrapper like that.  I went half way but decided that I wanted to keep it as simple as possible :P  Dunno.</p>
+<p>The only issue I'd see with using <strong>times-covered</strong> as a metric, is that it doesn't necessarily add power vs. looking at statement coverage--it's more about testing different ""states"".  (for example, you could test Queue by creating 10,000 100-entry Queues and filling them with only two items, and get the same times-coverage as testing 100 100-entry Queues by filling/unfilling each 100s of times). On the other hand, it's a nice metric to consider while cognizant of what it actually means.</p>";comment;12002164;12002154;2012-07-11 23:13:05.115394+00;0;;\N;100025197;2012-07-11 23:13:05.115394+00;12002979;\N;\N;0;f
+Course Application.;;;;;;;;;;;;;;;;;;
+Course content Opera browser error;;;;;;;;;;;;;;;;;;
+Feedback on Audio Quality;;;;;;;;;;;;;;;;;;
+Hungarian group;;;;;;;;;;;;;;;;;;
+What profile information is public?;;;;;;;;;;;;;;;;;;
+When will unit 2 be online?;;;;;;;;;;;;;;;;;;
+where is the sample page for homework?;;;;;;;;;;;;;;;;;;
+Whether pdf of Unit and Homework is available?;;;;;;;;;;;;;;;;;;
+12002219;;cs258 ;100025197;"<p><a href=""http://forums.udacity.com/users/100000573/bcontins""><a href=""http://forums.udacity.com/users/100000573/bcontins"">@bcontins</a></a> certainly true.  I like it as an idiom.  That said, ometimes it's clearer to translate '<code>bool ? a : b</code>' to '<code>a if bool else b</code>'</p>";comment;12002124;12002116;2012-07-11 23:46:39.818539+00;0;;12024877;100025197;2012-07-11 23:46:55.398994+00;12002988;\N;\N;0;f
+12002227;;cs258 ;100012200;"<p>Posted to the forums? No I haven't. Is that what you meant? I'm confused how that would help fixing any bugs in the grader.</p>
+<p>Did you mean tested any code that wouldn't pass? In that case, yes, I have.</p>";comment;12002225;12001803;2012-07-12 00:42:34.85321+00;0;;\N;100012200;2012-07-12 00:42:34.85321+00;12002999;\N;\N;0;f
+12002234;;cs258 ;100090161;"<p><a href=""http://forums.udacity.com/users/100072424/philip-craig""><a href=""http://forums.udacity.com/users/100072424/philip-craig"">@Philip</a></a> I think we've come to almost complete agreement. Saying <a href=""http://forums.udacity.com/users/100006631/thingymebob"">@Thingymebob</a>'s code is shorter because there aren't separate cases for even and odd lengths is dead on. However, I would shorten up your second statement. Rather than say, ""The use of reverse isn't the important part, but rather the idea of starting at the end and going backwards in order to make the two cases the same."" I would say, ""The use of reverse isn't the important part, but rather the idea of  making the two cases the same.""</p>
+<p>The elegant thing about handling the list in reverse is that as soon as you look at it from this perspective the illusion of two cases disappears. The last digit is never doubled, the second to last digit is always doubled and so on. If you only saw things from this viewpoint it would probably never even occur to you that there are two different cases to handle.</p>
+<p>However, those who only saw the numbers front to back still had the opportunity to make the two cases the same. They just had to do a little engineering to get there. Recognizing a pattern and abstracting it away is a fundamental skill of programming. Seeing a problem from a different perspective is a fundamental skill of genius. Either could have led to a concise solution in this case.</p>";comment;12002048;12002046;2012-07-12 01:25:59.724287+00;0;;\N;100090161;2012-07-12 01:25:59.724287+00;12003007;\N;\N;0;f
+12002262;;cs258 ;100025197;"<p><a href=""http://forums.udacity.com/users/100061230/brian-fitzgerald""><a href=""http://forums.udacity.com/users/100061230/brian-fitzgerald"">@Brian</a></a> @BillBarry 's example also applies here: what if your input isn't iterable either? (e.g. check_sudoku(0) )</p>";comment;12002235;12002220;2012-07-12 03:13:26.608291+00;0;;\N;100025197;2012-07-12 03:13:26.608291+00;12003050;\N;\N;0;f
+12002300;;cs258 ;100025468;"<p><a href=""http://forums.udacity.com/users/100119376/jeffrey-gorchynski"">@Jeffrey</a> : The fuzz_solver.py is a little broken since it doesn't return True if all the tests pass. I have created a gist for it. See <a href=""https://gist.github.com/3096035"" rel=""nofollow"">https://gist.github.com/3096035</a></p>";comment;12002229;12002220;2012-07-12 05:46:46.664777+00;0;;\N;100025468;2012-07-12 05:46:46.664777+00;12003111;\N;\N;0;f
+12002325;Online Sudoku Solver;cs258 resource ps3-2;100042694;"<p>This is the one of the best online resources for solving sudoku puzzles. If you want to see how to solve them without brute force then it describes the details of many techniques and will take a puzzle and step through the solution showing how it was solved.<br><br>
+<a href=""http://www.sudokuwiki.org/sudoku.htm"" rel=""nofollow"">link here</a></p>";question;\N;\N;2012-07-12 12:09:51.295581+00;3;;12042955;100042694;2012-07-12 16:12:02.085003+00;12005288;\N;\N;313;f
+12002354;;cs258 ;100008281;"<p>check_sudoku(subg) incorrectly returned True:</p>
+<pre><code>subg = [[9,8,7,6,5,4,3,2,1],
+        [8,7,6,5,4,3,2,1,9],
+        [7,6,5,4,3,2,1,9,8],
+        [6,5,4,3,2,1,9,8,7],
+        [5,4,3,2,1,9,8,7,6],
+        [4,3,2,1,9,8,7,6,5],
+        [3,2,1,9,8,7,6,5,4],
+        [2,1,9,8,7,6,5,4,3],
+        [1,9,8,7,6,5,4,3,2]]
+</code></pre>";comment;12002268;12002220;2012-07-12 15:57:27.52277+00;1;;\N;100008281;2012-07-12 15:57:27.52277+00;12003191;\N;\N;0;f
+12002358;;cs258 ;100008281;"<p>I got a really strange error checking your check_sudoku() with this grid:</p>
+<pre><code>fpgd = [[2,9,0,0,0,0,0,7,0],
+        [3,0,6,0,0,8,4,0,0],
+        [8,0,0,0,4,0,0,0,2],
+        [0,2,0,0,3,1,0,0,7],
+        [0,0,0,0,8,0,0,0,0],
+        [1,0,0,9,5.5,0,0,6,0],
+        [7,0,0,0,9,0,0,0,1],
+        [0,0,1,2,0,0,3,0,6],
+        [0,3,0,0,0,0,0,5,9]]
+</code></pre>
+<p>which is invalid because it has a 5.5 as one of its entries.  Your program, though, triggered an execption saying that the number of elements in a row was not 9:</p>
+<pre><code>Traceback (most recent call last):
+  File ""hw3_1-sudoku-checker-test.py"", line 207, in &lt;module&gt;
+    myassert('check_sudoku(fpgd)', [False, None])
+  File ""hw3_1-sudoku-checker-test.py"", line 197, in myassert
+    res = eval(f)
+  File ""&lt;string&gt;"", line 1, in &lt;module&gt;
+  File ""hw3_1-sudoku-checker-test.py"", line 159, in check_sudoku
+    res = check_1to9(row)
+  File ""hw3_1-sudoku-checker-test.py"", line 191, in check_1to9
+    assert elements == 9
+AssertionError
+</code></pre>
+<p>which has nothing to do with the fp nature of the entry</p>";comment;12002235;12002220;2012-07-12 16:07:46.499087+00;0;;\N;100008281;2012-07-12 16:07:46.499087+00;12003196;\N;\N;0;f
+12002375;;cs258 ;100025197;"<p>(edited) Floating point numbers should be <em>handled</em> in some way, but I'm not convinced that it should mean returning None.  Maybe you could just mutate the sudoku?  However, you lose some flexibility if you check specifically for integers.  E.g. if you wanted to make a special type of integer that could track how your sudoku worked or something. I was really surprised that ""1.0 in set([1, 2, 3])"" returns True, yet you can't index with 1.0.</p>";comment;12002229;12002220;2012-07-12 17:59:30.312277+00;0;;12025818;100025197;2012-07-12 18:10:52.453433+00;12003230;\N;\N;0;f
+12002382;;cs258 ;100025197;<p>@Goldsong, well, I fixed it and in so doing got a bonus check for index-ability.  However, I also learned that bools are nearly <em>exactly equivalent</em> to integers in Python. For example <code>[1,2,3,4][True] == 2</code>. I find that very strange.</p>;comment;12002229;12002220;2012-07-12 18:25:05.941292+00;0;;\N;100025197;2012-07-12 18:25:05.941292+00;12003238;\N;\N;0;f
+12002393;;cs258 ;100012200;"<p>@Stanislov I agree there are issues with using the forum for this, though I think it's a workable solution given our current featureset, and I'd say the conversation already going on speaks reasonably well to that.</p>
+<p>That being said, I would have loved if there was more of an infrastructure for something like this than we currently had. Originally something like what you described was planned, but due to various constraints we couldn't support that in enough time to make it a reasonably decent experience.</p>
+<p>Without that option, I hope everyone still has an opportunity to learn from each other in this format. If you have any suggestions/ideas for improving the experience for this kind of 'community problem set', I'd love to hear it.</p>";comment;12002220;12002220;2012-07-12 19:34:43.191861+00;3;;\N;100012200;2012-07-12 19:34:43.191861+00;12003258;\N;\N;0;f
+12002419;;cs258 ;100031056;"<p>Although I agree coding style matters a lot, I assume most students here are just learning Python.</p>
+<p>My first few programs in CS101 tried to use ""in"", ""str"", and ""list"" as variables, and I got the most cryptic error messages possible.  So, I too started using defensive, stupid variables such as 's', 'n', 'g', since they seemed very much unlikely to conflict with a reserved word, or even just a word with other undesirable side-effects.  Fortran lives on for another century with i,j,k being everyone's favorite loop variables...</p>
+<p>I consider most of my Python code to be utter garbage, but I'm trying to do things in different ways to see how it works.</p>";comment;12002215;12002046;2012-07-12 22:04:55.191533+00;0;;\N;100031056;2012-07-12 22:04:55.191533+00;12003295;\N;\N;0;f
+12002472;;cs258 ;100090161;"<p><a href=""http://forums.udacity.com/users/100008288/jeffery-morgan""><a href=""http://forums.udacity.com/users/100008288/jeffery-morgan"">@Jeffery Morgan</a></a> you say that jokingly but a good chunk of what I did could be automated and built into the Udacity system. Automated tools that check for the sort of things I did already exist. Generally, they have the word 'lint' in their name or are referred to as linters. I don't know of any that will comment on your variable naming but they can be set up to flag most of the other style issues I mentioned.</p>
+<p>I think it would make a great six week course to have the community build a linter for Udacity. It is this sort of, ""community creating the content"" instead of ""community consuming the content"" that I think will really propel online learning into the stratosphere.</p>";comment;12002217;12002046;2012-07-13 15:44:06.276283+00;1;;\N;100090161;2012-07-13 15:44:06.276283+00;12003360;\N;\N;0;f
+12002475;;cs258 ;100031056;"<p>My code does all 3 things.  I think that's why it takes so long on this problem.  Peter Norvig's site at <a href=""http://norvig.com/sudoku.html"" rel=""nofollow"">http://norvig.com/sudoku.html</a> talks about his solver code, which just happens to be very similar to the algorithm in my code, has trouble with some particular cases.  Basically, our algorithms get stuck sometimes doing too much work by trying to pick ""easy"" cells to work on first.  His ""fix"" was to add randomness to the cell selection to get out of the rut.  I suspect many people doing something other than simple depth-first search is faster on most problems, but then much slower on a few rare ones.  This would be an interesting property of Sudoku grids.  If I didn't have a real job to do, this would be interesting to look into.</p>";comment;12002459;12002403;2012-07-13 16:17:50.208284+00;0;;\N;100031056;2012-07-13 16:17:50.208284+00;12003364;\N;\N;0;f
+12002482;;cs258 ;100090161;"<p>The nit-pick police would probably point out that allowing only integers doesn't cover <a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey"">@Kent Dickey</a></a></a></a>'s point 4. I'm with you though. If I were writing the spec I would only allow integers.</p>
+<p>To use course lingo all of <a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey""><a href=""http://forums.udacity.com/users/100031056/kent-dickey"">@Kent Dickey</a></a></a></a>'s points revolve around trying to define what the domain is for the function. As the lecture videos point out, good tests cover the domain, but we can't write good tests if we don't know what the domain is.</p>
+<p>I do sympathize with the instructors because they are kind of in a catch 22. If you have a really detailed spec the code basically writes itself. For both writing and testing you just go down the list and check off that you've covered each point in the spec. Giving us a detailed spec would basically answer the very question they were asking us.</p>
+<p>This spec is probably somewhere around average for the level of detail it provides. Having said that it is not surprising software is such a buggy business.</p>";comment;12002451;12002436;2012-07-13 18:53:17.245625+00;0;;12026303;100090161;2012-07-13 18:58:25.77909+00;12003376;\N;\N;0;f
+12002503;;cs258 ;100008281;"<p>hum.. very clever.. but still it would not pass because F points to False:</p>
+<pre><code>&gt;&gt;&gt; F = False
+&gt;&gt;&gt; a = [1,2,F]
+&gt;&gt;&gt; str(a[2])
+'False'
+&gt;&gt;&gt; a
+[1, 2, False]
+&gt;&gt;&gt; id(False)
+4296471408
+&gt;&gt;&gt; id(F)
+4296471408
+&gt;&gt;&gt;
+</code></pre>
+<p>so even though the variable is 1-char long its identity is still 'False' (same object ids) whose string is 5-chars long..</p>";comment;12002309;12002220;2012-07-13 22:27:54.815648+00;0;;\N;100008281;2012-07-13 22:27:54.815648+00;12003399;\N;\N;0;f
+12002512;;cs258 ;100031056;<p>Solution: [[9, 4, 6, 8, 7, 5, 2, 3, 1], [3, 7, 2, 1, 4, 9, 5, 8, 6], [8, 5, 1, 3, 6, 2, 4, 7, 9], [1, 9, 4, 6, 2, 3, 7, 5, 8], [2, 6, 8, 9, 5, 7, 1, 4, 3], [5, 3, 7, 4, 8, 1, 9, 6, 2], [4, 1, 9, 7, 3, 6, 8, 2, 5], [6, 8, 5, 2, 9, 4, 3, 1, 7], [7, 2, 3, 5, 1, 8, 6, 9, 4]]</p>;comment;12002473;12002403;2012-07-14 01:27:22.979857+00;0;;\N;100031056;2012-07-14 01:27:22.979857+00;12003410;\N;\N;0;f
+12002531;;cs258 ;100090161;"<p>Because they so loosely specify what numeric data is acceptable I don't trust that when they say list they literally mean the list type. List is a natural English word like number.  They say list but they may really mean any sequence type. List is just easier to say than a nested sequence of sequences that support length and indexing.</p>
+<p>It's odd to have half a spec detailed to the point of giving type information and then have the second half wander off into vagueness.  I expect types for both or neither.</p>
+<p>Because I know a little about the Sudoku domain I expect they meant integers when they said numbers. To not specify integers in this case is a sizable omission. Where there is one error there are likely others.</p>
+<p>I believe they literally did mean the list type but because of the other errors I am maybe only 80-90% confident. If I'm only 80-90% confident I'm interpreting the spec right, no matter how good my testing, I can not be more than 80-90% confident my code is right.</p>
+<p>Even if you absolutely convince me that they had to mean the list type, I still don't know if they meant only the list type or if subclasses are OK. I realize I'm being pedantic but once the alarms go off my mind wants every detail nailed down before it goes back into tranquil mode.</p>";comment;12002451;12002436;2012-07-14 06:26:41.000113+00;1;;12026483;100090161;2012-07-14 06:29:35.352144+00;12003435;\N;\N;0;f
+12002547;;cs258 ;100090161;"<p>Your code looks pretty good. The only style point I will make which hasn't been mentioned in another post has to do with<br>
+</p><pre><code>mod    = len(string) % 2</code></pre><br>
+Adding extra spaces to vertically align text is not something that is really done in python. It is something the python language designers specifically ask people not to do in the <a href=""http://www.python.org/dev/peps/pep-0008/#pet-peeves"" rel=""nofollow"">Python Style Guide (PEP8).</a><p></p>
+<p>You can keep doing it if you really feel it makes your code more readable but most python programmers will think it makes your code look ugly.</p>";comment;12002464;12002046;2012-07-14 13:49:17.915599+00;0;;\N;100090161;2012-07-14 13:49:17.915599+00;12003463;\N;\N;0;f
+12002555;;cs258 ;100039590;"<p>Hi,<br>
+In your check_sudoko function should the first if statmenet check whether grid is a list and not just if grid is false (which made no sens at all, as the parameter in the function call is not optional).</p>
+<p>The statement <code>(number&lt;0 and number &gt;9)</code> is always false, there is no number which is negativ and greater then nine. <code>or</code> is the correct operator.</p>";comment;12002549;12002220;2012-07-14 14:53:27.984833+00;1;;\N;100039590;2012-07-14 14:53:27.984833+00;12003472;\N;\N;0;f
+12002576;;cs258 ;100090161;"<p>I actually thought maybe the Sudoku problem was chosen because it exemplifies many of the testing ideas discussed in unit 3. Specifically, I think it is an ideal candidate to demonstrate random testing with mutation.  Given a solved puzzle I can randomly blank out squares to create a new puzzle that I know is also solvable. In addition, there are various transformations I can make to a solved puzzle such as rotations or swapping sets of three rows or columns to also generate another grid I know is solvable.</p>
+<p>In addition, if I'm trying to generate a new grid, rather than just assign a value between 1 and 9 to each cell, which would give me a very low probability of a valid puzzle. I can do something like tack 9 copies together of the shuffled list [1 .. 9].  This would make a grid that has a much higher probability of being valid. There are even more sophisticated things you could do to generate valid grids but it highlights the idea of trying to have an equal number of test cases across the subsets of your domain. If I don't do something smart with my random test case generation I will spend most of my time exercising the invalid puzzle region.</p>
+<p>Having said that there is an excellent reason to consider this a lousy random testing target. Do to the nature of the constraints in a Sudoku puzzle once my solver solves one puzzle correctly I can already be pretty confident it solves them all correctly.  A dozen test cases from the valid region might already be approaching overkill.</p>";comment;12002552;12002530;2012-07-14 17:26:26.199585+00;0;;\N;100090161;2012-07-14 17:26:26.199585+00;12003503;\N;\N;0;f
+12002578;;cs258 ;100090161;"<p>Yes, I believe you expressed your point very clearly in your initial question. I have similar concerns and I thought your point was valid enough to warrant an up vote. I hope you enjoy the karma boost.</p>
+<p>I posted my comments under <a href=""http://forums.udacity.com/users/100071973/sean-fitzgibbon""><a href=""http://forums.udacity.com/users/100071973/sean-fitzgibbon"">@Sean Fitzgibbon</a></a>'s answer instead of yours because they were mainly in response to the additional issues he raised. I didn't mean for what I said to be construed as an answer to your question. I'm sorry if the digression offended you or made it seem like I was trying to hijack your thread.</p>";comment;12002552;12002530;2012-07-14 17:56:20.704478+00;0;;12026680;100090161;2012-07-14 18:18:45.272282+00;12003510;\N;\N;0;f
+12002581;;cs258 ;100001468;"<p>I think that <code>[[],range(9)+range(9),range(9),range(9),range(9),range(9),range(9),range(9),range(9)]</code> passes your sanity check (then causes an error). You can make a similar on to return False.</p>
+<p>It is a very neat sanity check though, I like it :)</p>";comment;12002580;12002220;2012-07-14 18:33:31.860495+00;1;;\N;100001468;2012-07-14 18:33:31.860495+00;12003511;\N;\N;0;f
+12002582;;cs258 ;100001468;<p>passing in something non-iterable (e.g. 123) as <code>grid</code> causes an error, as does a length 9 list with a non-iterable as an element.</p>;comment;12002575;12002220;2012-07-14 18:36:19.960535+00;0;;\N;100001468;2012-07-14 18:36:19.960535+00;12003512;\N;\N;0;f
+12002604;;cs258 ;100008281;"<p>Hi Craig, your code is accepting these i-ll formed inputs</p>
+<pre><code>boolg = [[2,9,0,0,False,0,0,7,0],
+        [3,0,6,0,0,8,4,0,0],
+        [8,0,0,0,4,0,0,0,2],
+        [0,2,0,0,3,1,0,0,7],
+        [0,0,0,0,8,0,0,0,0],
+        [1,0,0,9,5,0,0,6,0],
+        [7,0,0,0,9,0,0,0,1],
+        [0,0,1,2,0,0,3,0,6],
+        [0,3,0,0,0,0,0,5,9]]
+</code></pre>
+<p>and</p>
+<pre><code>tupl  =[(2,9,0,0,0,0,0,7,0),
+        (3,0,6,0,0,8,4,0,0),
+        (8,0,0,0,4,0,0,0,2),
+        (0,2,0,0,3,1,0,0,7),
+        [0,0,0,0,8,0,0,0,0],
+        [1,0,0,9,5,0,0,6,0],
+        [7,0,0,0,9,0,0,0,1],
+        [0,0,1,2,0,0,3,0,6],
+        [0,3,0,0,0,0,0,5,9]]
+</code></pre>";comment;12002329;12002220;2012-07-14 21:10:45.859378+00;0;;\N;100008281;2012-07-14 21:10:45.859378+00;12003546;\N;\N;0;f
+12002614;;cs258 ;100008281;"<p>Hi Max,</p>
+<p>The pasting of your code messed up the indentation of the statements in your class.</p>
+<p>In addition, your check_sudoku() is accepting booleans and tuples:</p>
+<pre><code>boolg = [(2,9,0,0,False,0,0,7,0),
+        [3,0,6,0,0,8,4,0,0],
+        [8,0,0,0,4,0,0,0,2],
+        [0,2,0,0,3,1,0,0,7],
+        [0,0,0,0,8,0,0,0,0],
+        [1,0,0,9,5,0,0,6,0],
+        [7,0,0,0,9,0,0,0,1],
+        [0,0,1,2,0,0,3,0,6],
+        [0,3,0,0,0,0,0,5,9]]
+</code></pre>";comment;12002426;12002220;2012-07-14 21:35:33.009658+00;0;;\N;100008281;2012-07-14 21:35:33.009658+00;12003557;\N;\N;0;f
+12002625;;cs258 ;100008281;"<p>Hi Anghel.. your checker is accepting valid pf entries and booleans (you might consider these bugs or not) and it is accepting rows written as tuples instead of lists:</p>
+<pre><code>boolg = [[2,9,0,0, False, 0,0,7,0],
+        [3,0,6,0,0,8,4,0,0],
+        (8,0,0,0,4.0 ,0,0,0,2),
+        [0,2,0,0,3,1,0,0,7],
+        [0,0,0,0,8,0,0,0,0],
+        [1,0,0,9,5,0,0,6,0],
+        [7,0,0,0,9,0,0,0,1],
+        [0,0,1,2,0,0,3,0,6],
+        [0,3,0,0,0,0,0,5,9]]
+</code></pre>
+<p>Is is also crashing when it receives a tuple (it accepted the tuple but then tries to index the integers):</p>
+<pre><code>bad0 = (0, 1, 2, 3, 4, 5, 6, 7, 8)
+</code></pre>";comment;12002468;12002220;2012-07-14 22:00:12.505318+00;0;;12026800;100008281;2012-07-14 22:00:59.259373+00;12003571;\N;\N;0;f
+12002633;;cs258 ;100009942;"<p>Prior to Python 2.5 that and/or trick was the method for implementing a ternary conditional operator like statement. </p>
+<p>In Python 2.5, they added the ""<code>x = trueValue if condition else falseValue</code>"" conditional to the language partly because of the prevalence of error prone attempts to do it using and/or formulations.</p>";comment;12002124;12002116;2012-07-14 22:50:05.718655+00;0;;\N;100009942;2012-07-14 22:50:05.718655+00;12003581;\N;\N;0;f
+12002637;;cs258 ;100023849;<p>Andy -- nice catch on line 4.  Line 7 is needed to catch 'False' showing up in a list.  isinstance(False,bool) returns True, but isinstance(0,bool) returns False.</p>;comment;12002494;12002220;2012-07-14 23:38:30.31832+00;0;;\N;100023849;2012-07-14 23:38:30.31832+00;12003587;\N;\N;0;f
+12002649;;cs258 ;100031056;"<p>It's much harder to write specifications than it is to write code.</p>
+<p>I have a VLSI hardware background, and our general solution is multiple specs.  Architects create the high level spec, and the engineering team produces an engineering spec of what they plan to build (though often, this ends up being a spec of what WAS built).  Verification is done focused on the implementation spec, although issues between the specs are also considered bugs.  So I'd view Sean as the architect, and then we as implementors can create our own implementation spec.</p>
+<p>The problem was it was asked that we test each others code.  And then we have a problem.</p>
+<p>I view Sean's code in the Answer video as his implementation spec.  And his code requires a list of list of integers.  Everything else returns None.  And I think for many reasons that's the only spec that makes sense.  I think you were right to consider an implementation accepting floats as incorrect, and I agree with Booleans as incorrect also.</p>
+<p>Note that if you think in advance about random testing with ""fuzz"" values when deciding how to write check_sudoku(), it's the safest approach as well--toss out as much crap as early as possible.  Trying to support floats and other weird items just makes more work down the road. </p>
+<p>Also, those of us with professional backgrounds may be expecting too much for week 3 of an intermediate level class.</p>";comment;12002645;12002220;2012-07-15 02:32:56.753484+00;1;;\N;100031056;2012-07-15 02:32:56.753484+00;12003600;\N;\N;0;f
+12002672;;cs258 ;100031056;"<p>Your code crashes with a type error when passed the following input:</p>
+<p>bad0 = (0, 1, 2, 3, 4, 5, 6, 7, 8)</p>
+<p>You can run my test code from <a href=""http://forums.udacity.com/cs258/questions/2385/problem-set-3-additional-test-casesfuzzing-making-the-code-thread-a-bit-clearer/2569"" rel=""nofollow"">http://forums.udacity.com/cs258/questions/2385/problem-set-3-additional-test-casesfuzzing-making-the-code-thread-a-bit-clearer/2569</a>  Edit the end of the file to use print test_sud_solver(500, 0, 1), and edit the first line of function test_bad_grid() to uncomment the print_grid line() so it prints out the bad grid each time.</p>";comment;12002648;12002220;2012-07-15 12:22:29.294201+00;0;;\N;100031056;2012-07-15 12:22:29.294201+00;12003642;\N;\N;0;f
+12002675;;cs258 ;100001468;"<p>which python editor do you use? Your text editor should ask how it uses tabs (as some number of spaces) in the preferences. I use <a href=""http://www.sublimetext.com/"" rel=""nofollow"">sublime</a> and don't have any problems (I think it converts all tabs into spaces by default).</p>";comment;12002425;12002425;2012-07-15 12:48:55.408036+00;0;;\N;100001468;2012-07-15 12:48:55.408036+00;12003645;\N;\N;0;f
+12002679;;cs258 ;100001468;<p>You haven't included the <code>check_sudoku</code> part, and I suspect it is lacking otherwise your 4th to last line (<code>type(grid) == list</code>) would be superfluous.</p>;comment;12002644;12002220;2012-07-15 13:06:22.120185+00;0;;\N;100001468;2012-07-15 13:06:22.120185+00;12003649;\N;\N;0;f
+12002705;;cs258 ;100011737;"<p>Thanks for the pointer to the other work you've done -- I'd just seen the fuzz_solver.py code originally.</p>
+<p>I think that the fuzz_checker.py isn't testing the negative element case per the spec.  (my reading of the spec has ""if element is outside the range 0..9, then check_soduku() must return None"", while the test code asserts that check_soduku() should return False in this case)</p>
+<p>Matt</p>";comment;12002689;12002385;2012-07-15 17:13:51.599181+00;0;;\N;100011737;2012-07-15 17:13:51.599181+00;12003689;\N;\N;0;f
+12002715;;cs258 ;100060082;"<p>Great catch. I didn't check for type on the input data or sanitize it.</p>
+<p>Your code was really helpful to drive my development with the random tests, thank you!</p>";comment;12002648;12002220;2012-07-15 19:45:39.763928+00;0;;\N;100060082;2012-07-15 19:45:39.763928+00;12003703;\N;\N;0;f
+12002722;;cs258 ;100031056;"<p>Parsing args is not really where I'm stuck (although I didn't know how to do it, but a quick Google shows sys.argv has the commandline).  I'm not a fan of overly complex argument parsing libraries.  It's usually less code to just get the args and process them in a simple, direct way.</p>
+<p>Where I'm stuck is I have no idea how to use Python to deal with multiple files.  So I have my solvtest5.py code, and I have some users code, let's say I called the file gist123456.py.  What Python code do I put in solvtest5.py to be able to run check_sudoku() from gist123456.py?  I'm happy to type almost anything at the command line, I'm looking for the simplest solution.  Your code looks about as complex as using manual shared libraries under C, and uses Python way over my head.  Is that really how all Python program larger than one file work?</p>
+<p>My solution is I discovered import looks in the current directory.  So if I always name the code I want to test ""sut.py"", then ""import sut"" let's me reference the code as sut.check_sudoku().  That's fine...but it's annoying to always have to rename the code I want to test as sut.py.  I guess I could try to go down the eval() route to do a ""dynamic"" import, but that just seems ridiculous (and my experience with Perl was it's usually best to avoid eval since it's quite annoying to deal with).</p>";comment;12002569;12002385;2012-07-15 21:01:19.251638+00;0;;\N;100031056;2012-07-15 21:01:19.251638+00;12003711;\N;\N;0;f
+12002738;;cs258 ;100025197;"<p>@KentDickey here's how you can do it more simply, just using <code>imp</code> and sys.argv -- <a href=""https://gist.github.com/3119440"" rel=""nofollow"">https://gist.github.com/3119440</a> (imp is basically exactly the same as using <code>import sut</code>). You can see that, if you don't care about catching errors, you can write it in 5 lines.  </p>
+<p>(I just added the try/except clauses to make it easier to handle attribute errors (when the specific function name isn't found) and the <code>*_name</code> variables s.t. you can change how the name is imported (and allow you to pass them right in at the command line).)</p>
+<p>Personally, I made the argument parsers because I wanted to make it easier for people (and me) to just run the program on their file quickly and simply (and, because Python changed their parser in 2.7 and obsoleted their old parser, I had to write two files). Possibly also because I wanted to get practice with it :P</p>";comment;12002569;12002385;2012-07-16 00:44:45.688021+00;0;;12027282;100025197;2012-07-16 00:58:27.731395+00;12003741;\N;\N;0;f
+12002744;;cs258 ;100025197;"<p>@KentDickey well, thanks for pointing that out...I should have tested it better. I'll put that in too. BTW -- it's really easy to make your Python 2.4.3 machine work with all:</p>
+<pre><code>def all(iterable):
+    for elem in iterable:
+        if not elem:
+            return False
+    return True
+</code></pre>
+<p>It should (but apparently not for you?) only do the solver if you do --test=solver (I put this in so it wouldn't fail for me before I had a solver set up), but, as you pointed out earlier, there's a good case to be made that the argparse adds a bunch of complexity without tons of benefit.</p>";comment;12002743;12002385;2012-07-16 02:20:02.821414+00;0;;12027309;100025197;2012-07-16 02:20:15.848677+00;12003752;\N;\N;0;f
+12002747;;cs258 ;100025197;"<p><a href=""http://forums.udacity.com/users/100025468/ked4r-4""><a href=""http://forums.udacity.com/users/100025468/ked4r-4"">@ked4r</a></a> very nice and concise!  I'd probably change <code>sum(map(sum, solution)</code> to <code>sum(sum(row) for row in sudoku)</code> just because I tend towards list/generator comprehensions.</p>";comment;12002741;12002385;2012-07-16 02:36:41.270249+00;0;;\N;100025197;2012-07-16 02:36:41.270249+00;12003758;\N;\N;0;f
+12002774;;cs258 ;100041323;"<p>Thanks. I think you do a very good job testing our solutions.<br>
+IMHO floats and booleans are valid values for our grid.<br>
+PS Specification says: ""number in the range 1..9"".<br>
+Float is a number.<br>
+According to Python's specification Booleans and Integers ""represent elements from the mathematical set of integers"" (http://docs.python.org/reference/datamodel.html#the-standard-type-hierarchy), also both isinstance(True, int) and True in {1} are True.<br>
+Hence I accept booleans and floats with zero fractional part.  <br>
+:-)</p>";comment;12002443;12002220;2012-07-16 14:02:47.692469+00;0;;12027514;100041323;2012-07-16 14:04:16.980134+00;12003795;\N;\N;0;f
+12002812;;cs258 ;100090161;"<p>The style of your code now looks more in line with the pep8 guidelines. I think many python programmers would also put spaces around the minus sign in<br>
+</p><pre><code>credit_double = [int(x) * 2-9 ...</code></pre><br>
+so that it read<br>
+<pre><code>credit_double = [int(x) * 2 - 9 ...</code></pre><p></p>
+<p>Even with the better formatting the code still has some issues but from the warning you attached to your initial post I think you understand that.</p>";comment;12002526;12002046;2012-07-17 03:13:18.999233+00;0;;\N;100090161;2012-07-17 03:13:18.999233+00;12003842;\N;\N;0;f
+12002826;;cs258 ;100016314;"<p>Hi <a href=""http://forums.udacity.com/users/100118210/roy-schweiker""><a href=""http://forums.udacity.com/users/100118210/roy-schweiker"">@Roy Schweiker</a></a>, I think I have a program that would have a good chance to catch this. </p>
+<p>I also have 4-5 modified queues that have obscure bugs in different locations.</p>
+<p>I used those modified queues to build the program that I have as follows. Start with the basic queue code and your code from unit 3-26. Modify the basic queue code to insert a subtle bug for the queue you want to test. Run your code from unit 3-26, does that code detect the bug you inserted? Modify the unit 3-26 code until it does detect that bug in a reasonable amount of time. Then modify the basic queue code to insert another bug and start the process all over. Going through that process 4-5 times got the fuzzy tester code to where it is today. It was actually quite fun to do this, and I learned quite a bit.</p>
+<p>A homework problem in this area would make some sense following the material in unit 4, so there's a chance that work that you do in this area might give you a head start in this area.</p>
+<p>What would be great would be to have some way to 'package' up these additional buggy queues so that they could be shared between students in the class without the students being able to see the source code of the buggy queues.  I don't know how to do that.</p>";comment;12002807;12002795;2012-07-17 13:59:13.753687+00;0;;12027823;100016314;2012-07-17 14:05:13.81633+00;12003860;\N;\N;0;f
+12002839;;cs258 ;100016314;"<p>Hi <a href=""http://forums.udacity.com/users/100019808/viktor-ognev""><a href=""http://forums.udacity.com/users/100019808/viktor-ognev"">@Viktor Ognev</a></a>, I think you might have an issue here:</p>
+<pre><code>def check_sudoku_complete_results(grid):
+    gridsize = 9
+    if gridsize % 3 != 0: return None, 'incorrect size'
+    if len(grid) != gridsize:
+</code></pre>
+<p>I think your third line 'if gridsize % 3 != 0'  should be 'if grid % 3 != 0'</p>";comment;12002823;12002220;2012-07-17 18:34:09.699984+00;0;;\N;100016314;2012-07-17 18:34:09.699984+00;12003876;\N;\N;0;f
+12002848;;cs258 ;100041323;"<p>Your solution returns right values. IMHO it's simple too slow. Easy takes 5 sec and hard - 14.<br>
+Try to optimize it a little. For example solve_sudoku calls check_sudoku which makes full check inclusive sanity checks, but grid dimensions or cells value type / range will be never changed.</p>";comment;12002841;12002220;2012-07-17 22:24:30.293541+00;0;;\N;100041323;2012-07-17 22:24:30.293541+00;12003887;\N;\N;0;f
+12002859;;cs258 ;100018920;"<p>Thanks for that tester! It did not crash my solver except for the timeout which I adjusted. It took my solver 7.5 minutes to work all the puzzles in your test. I need to see where all that time is going.</p>
+<p>Solver basically works.  Elapsed time = 8<br>
+   0 broken puzzles 0 fails and 0 passes.  1000 puzzles left<br>
+   100 broken puzzles 64 fails and 36 passes.  900 puzzles left<br>
+   200 broken puzzles 136 fails and 64 passes.  800 puzzles left<br>
+   300 broken puzzles 210 fails and 90 passes.  700 puzzles left<br>
+   400 broken puzzles 287 fails and 113 passes.  600 puzzles left<br>
+   500 broken puzzles 359 fails and 141 passes.  500 puzzles left<br>
+   600 broken puzzles 432 fails and 168 passes.  400 puzzles left<br>
+   700 broken puzzles 502 fails and 198 passes.  300 puzzles left<br>
+   800 broken puzzles 570 fails and 230 passes.  200 puzzles left<br>
+   900 broken puzzles 642 fails and 258 passes.  100 puzzles left<br>
+   Passed fuzzer with 1000 tests with 716 fails and 284 passes in 447    seconds  </p>
+<p>real    7m37.709s<br>
+   user    7m33.200s<br>
+   sys     0m2.600s</p>";comment;12002858;12002220;2012-07-18 00:19:37.646844+00;0;;12027969;100018920;2012-07-18 00:21:05.199055+00;12003903;\N;\N;0;f
+12002869;;cs258 ;100025468;"<p><a href=""http://forums.udacity.com/users/100018920/bill-barry""><a href=""http://forums.udacity.com/users/100018920/bill-barry"">@Bill Barry</a></a>: Can you run my code to see where anything crashes? It is the link in the answer: <a href=""http://forums.udacity.com/cs258/questions/2220/problem-set-3-code-thread/2272"" rel=""nofollow"">http://forums.udacity.com/cs258/questions/2220/problem-set-3-code-thread/2272</a> (https://gist.github.com/3095535)</p>";comment;12002858;12002220;2012-07-18 02:34:44.097359+00;0;;\N;100025468;2012-07-18 02:34:44.097359+00;12003915;\N;\N;0;f
+12002914;;cs258 ;100031056;"<p>From the ""try"" documentation:</p>
+<hr>
+<h2>If finally is present, it specifies a â€˜cleanupâ€™ handler. The try clause is executed, including any except and else clauses. If an exception occurs in any of the clauses and is not handled, the exception is temporarily saved. The finally clause is executed. If there is a saved exception, it is re-raised at the end of the finally clause. If the finally clause raises another exception or executes a return or break statement, the saved exception is lost. The exception information is not available to the program during execution of the finally clause.</h2>
+<p>So, upon entry to finally, if an exception had been raised but not handled by an ""except"" clause, it's saved, to give the finally clause a chance to clean up.  I can see why that would be useful.  And that if the finally clause does a ""raise"", ""return"" or ""break"", that saved exception will be discarded quietly.  Otherwise, at the end of the finally clause, that saved exception will then be taken.</p>
+<p>When I originally read this, I got the impression the finally clause will execute and then exceptions will be handled.  My interpretation was if code called from the finally clause does a ""raise"" (but not in the finally clause directly), it will not be taken right away?  But that's probably not the right interpretation.</p>
+<p>And I just now realized my code has a race condition before the try block as well, where the alarm could occur before entering the try clause.  So the alarm setting has to be moved into the try block.  Which makes cleanup even more difficult since a different exception could occur before the alarm setting occurred, so the save alarm variable won't always be valid.</p>";comment;12002913;12002912;2012-07-19 22:01:35.070954+00;0;;\N;100031056;2012-07-19 22:01:35.070954+00;12003987;\N;\N;0;f
+12002915;;cs258 ;100059995;"<p>I'm not quite sure what you're trying to say with that comment. I can't tell if you're trying to contest what I told you, or if you're agreeing with it.</p>
+<p>I did read that documentation before I responded to you, and it doesn't contradict what I told you in any way. I even did a few experiments to verify my understanding of things before I responded, and the results matched up to my understanding of the documentation.</p>
+<p>If there's an <em>unhandled</em> exception in a try, except, or else clause then the exception is saved, the finally clause is executed in full (if it exists), and the saved exception is re-raised after the finally clause has finished executing. This ensures that the finally clause gets called no matter what.</p>
+<p>If, however, an exception is raised within the finally clause itself, it is raised immediately, <em>not</em> saved until the end of the finally clause and then raised. If this exception is not handled, this results not only in the immediate termination of the finally clause but also in the loss of any previously saved unhandled exception that would have been raised after the finally clause finished.</p>
+<p>In any event, all this actually has no relevance to the problem you were trying to solve. I was simply trying to correct a misunderstanding that I saw in your prose, not a bug in your code. For the solution to your actual problem with your code, take a look at the second snippet in my answer. It should fully solve your problem.</p>";comment;12002913;12002912;2012-07-19 22:32:37.877942+00;0;;12028982;100059995;2012-07-19 23:06:49.408003+00;12003994;\N;\N;0;f
+12002942;;cs258 ;100012879;<p>The reason I mentioned it is because the pdf is generated from the powerpoint file, and it's not very well done as you can see in the first page where the monkey covers the text, it happens many more times in the file. The problem is that the powerpoint file has disappeared even from Miller's website so we can't check the quality of the powerpoint conversion because I read that the original file comes for Keynote. So so far the best sources are the videos from youtube</p>;comment;12002937;12002887;2012-07-20 10:57:53.009346+00;0;;\N;100012879;2012-07-20 10:57:53.009346+00;12004026;\N;\N;0;f
+12002949;;cs258 ;100073209;"<p>Fuzz Testing for Dummies:</p>
+<p><a href=""http://www.us-cert.gov/control_systems/icsjwg/presentations/spring2011/ag_16b_ICSJWG_Spring_2011_Conf_Manion_Orlando.pdf"" rel=""nofollow"">http://www.us-cert.gov/control_systems/icsjwg/presentations/spring2011/ag_16b_ICSJWG_Spring_2011_Conf_Manion_Orlando.pdf</a></p>
+<p>Very interesting introduction to Fuzz Testing</p>";comment;12002941;12002926;2012-07-20 14:17:19.325971+00;0;;12029227;100073209;2012-07-20 14:18:23.275515+00;12004036;\N;\N;0;f
+12002974;;cs258 ;100020295;"<p>I forked your code to fuzz  ubuntu pdf reader evince : <a href=""https://gist.github.com/3154100"" rel=""nofollow"">https://gist.github.com/3154100</a></p>
+<p>I don't think it really crashed, and i saw a bunch of errors like</p>
+<p>Error (246099): Dictionary key must be a name object<br>
+Error (246102): Dictionary key must be a name object<br>
+Error (246136): Illegal character ')'<br>
+Error: Couldn't find trailer dictionary<br>
+Error: Couldn't read xref table<br>
+Error: May not be a PDF file (continuing anyway)<br>
+Error: PDF file is damaged - attempting to reconstruct xref table...<br>
+Error: Couldn't find trailer dictionary<br>
+Error: Couldn't read xref table<br>
+Error: PDF file is damaged - attempting to reconstruct xref table...<br>
+Error: Kid object (page 2) is not an indirect reference (integer)</p>
+<p>And assertions failed in evince:<br>
+(evince:8178): EvinceView-CRITICAL **: ev_document_model_set_document: assertion `EV_IS_DOCUMENT (document)' failed</p>
+<p><strong> (evince:8178): CRITICAL </strong>: ev_sidebar_page_support_document: assertion `EV_IS_DOCUMENT (document)' failed</p>
+<p>(evince:8178): EvinceDocument-CRITICAL **: ev_document_get_n_pages: assertion `EV_IS_DOCUMENT (document)' failed</p>
+<p>and in glib :<br>
+(evince:8596): GLib-GObject-CRITICAL **: g_object_ref: assertion `G_IS_OBJECT (object)' failed</p>
+<p>(evince:8596): GLib-GObject-CRITICAL **: g_object_unref: assertion `G_IS_OBJECT (object)' failed</p>";comment;12002957;12002918;2012-07-21 01:03:54.382511+00;0;;\N;100020295;2012-07-21 01:03:54.382511+00;12004069;\N;\N;0;f
+12003012;;cs258 ;100001468;"<p>""If you have a different fuzzer you'll find different bugs"" was also something Charlie Miller said. I think it makes sense to use a spectrum of fuzzing (from smart to dumb) if possible. <em>Since dumb fuzzing is much cheaper, if you're going to smart fuzz you might as well also dumb fuzz.</em></p>";comment;12002965;12002964;2012-07-21 21:29:50.460228+00;0;;\N;100001468;2012-07-21 21:29:50.460228+00;12004142;\N;\N;0;f
+12003014;;cs258 ;100001468;<p>I <em>think</em> this is the what is required to actually get paid (for finding security bugs). Charlie Miller also has some talks about this part of the proceedings...</p>;comment;12003009;12002952;2012-07-21 21:36:32.450797+00;0;;\N;100001468;2012-07-21 21:36:32.450797+00;12004145;\N;\N;0;f
+12003039;;cs258 ;100059995;"<p>Code written for Python 2 was never intended to run under Python 3 without modification. Many of the built-in functions and libraries were moved, reorganized, replaced, etc. There were changes in syntax; again lots of stuff changed, deprecated, removed...</p>
+<p>So yes, I'm sure you did have problems if you were trying to run Python 2 examples under Python 3. All this was <em>intentional</em> though. In order to make improvements to the language, some old mistakes and warts needed to be corrected in a non-backwards-compatible way. The Python community had been saving up suggestions for these non-backwards-compatible improvements for ages with the intent of making these changes all at once during one big overhaul of the language.</p>
+<p>There were a couple mis-steps with version 3.0 right out of the gate (which were fixed in subsequent updates), but nothing on the scale that you mention, at least not that I recall. Mostly it just sounds like you were trying to run Python 2 code under Python 3 and it wasn't working... which is actually a symptom of correct, not buggy, behavior.</p>
+<p>You should take a look at the changes that were made going from 2 to 3: <a href=""http://docs.python.org/py3k/whatsnew/3.0.html"" rel=""nofollow"">http://docs.python.org/py3k/whatsnew/3.0.html</a></p>
+<p>You can see that quite a lot was changed. If you take the time to peruse that document you'll have a fairly good idea of how to update any Python 2 examples to run under Python 3. If you don't want to invest the time in that though, you can just run any Python 2 code through the '2to3' tool, which in most cases will be able to translate your code for you.</p>";comment;12003036;12002976;2012-07-22 08:57:15.571769+00;0;;\N;100059995;2012-07-22 08:57:15.571769+00;12004184;\N;\N;0;f
+12003066;;cs258 ;100018920;"<p>Yes, it would go much quicker if you could fuzz the image file, and pass that image file to a viewer without touching the filesystem. What you really need is some type of image server mode where you can continually pass image files to it without restarting it except for when you crash it. </p>
+<p>You could pass the images to a browser with ajax. You write your application as a web app that constantly serves fuzzed images to a browser and try to crash the browser. Or maybe eog has some kind of server mode?</p>";comment;12003058;12003038;2012-07-22 21:14:50.242395+00;0;;12030273;100018920;2012-07-22 21:17:25.539961+00;12004230;\N;\N;0;f
+12003067;;cs258 ;100000485;"<p>Upon searching for how to find program paths in Linux I learned that typing ""whereis program name"" in the terminal will show you its path.</p>
+<p>So I solved that problem and I'm just about to start fuzzing xpdf for maybe a softer target. </p>
+<p>I also figured out what was wrong with my windows attempt - I was inputting the wrong path. Figures it was something stupid like that! But at least I learned something new in the process.</p>";comment;12003026;12002967;2012-07-22 21:15:28.805984+00;0;;\N;100000485;2012-07-22 21:15:28.805984+00;12004229;\N;\N;0;f
+12003068;;cs258 ;100110377;"<p>Hi, based on Åukasz PrzytuÅ‚a fuzzer, I applied the fuzzer to the linking phase of GCC (which calls finally ld). I place at <a href=""https://gist.github.com/3161095"" rel=""nofollow"">gist</a> the ugly code it resulted, but the nice thing is that it found a bug really fast, like in 10 iterations or so:</p>
+<pre><code>/usr/bin/ld: BFD version 2.22.52.0.1-10.fc17 20120131 internal error, aborting at reloc.c line 6394 in bfd_generic_get_relocated_section_contents
+/usr/bin/ld: Please report this bug.
+</code></pre>
+<p>And as commanded, I reported it.</p>
+<p>So far, no other bug was found.</p>
+<p>The important changes over 'normal' code, is that this need several input files, and it reads the list of files from a file. Finally when a bug appears, the used files are stored in a zip file.</p>";answer;12002918;12002918;2012-07-22 21:42:08.121032+00;1;(accepted);\N;100110377;2012-07-22 21:42:08.121032+00;12004231;\N;\N;0;t
+12003071;;cs258 ;100016314;"<p>Hi <a href=""http://forums.udacity.com/users/100004871/kris-king""><a href=""http://forums.udacity.com/users/100004871/kris-king"">@Kris King</a></a>, I think it's a fine discussion as well.</p>
+<p>As Prof John describes (one) way of using random testers, you write something, starting simple, and you look at the test cases created, and you think about what you are seeing, then you add some functionality to create better test cases, and on and on you go.  </p>
+<p>In the process of doing this, I think you have the human doing what you are looking for above - the human needs to determine what portion of the testing the random tester is covering. </p>
+<p>My experience is investments in enhancing your random tester leverage forward with less effort.</p>
+<p>For discussion, let's assume we have a random tester and a test suite of 100 targeted test cases, and a spec that goes through many changes. Each time the spec changes I need to change the random tester and also look at and potentially change each of the 100 individual test cases. This quickly becomes time-consuming and tedious. It becomes less work, over time, to get the random tester to create those special test cases for you. It is more work up front to get your random tester to spit out the individual test capability, but much less work to port the capability forward as the spec changes, or from one generation of the product under test to the next. </p>
+<p>I am not arguing for no individual test cases. Individual test cases may make lots of sense at the unit level, for example. I'm also not arguing for no individual test cases at the top level, maybe I want a few that run really quickly to detect that the latest build of the software under test has broken something really badly, and maybe I would want to run these individual cases before I run the random tester to ensure basic functionality is OK before I let the random tester loose on the SUT. </p>
+<p>I am arguing to make the set of individual test cases as small as you can.</p>
+<p>The approach here may also vary with where the SUT is in it's development. When the SUT is being developed for the first time, and is brand new, it's going to be easy to find bugs where you expect, pretty much all over the place. These early bugs can be found pretty much with any approach, because they are 'easy'. Individual test cases may work well for these early phases of testing. After the 'easy' bugs get fixed, and the SUT is mostly working, the bugs become more difficult to find. You</p>";comment;12003049;12003045;2012-07-22 22:31:35.34417+00;1;;12030292;100016314;2012-07-22 22:31:47.505287+00;12004235;\N;\N;0;f
+12003124;;cs258 ;100001468;"<p><a href=""http://forums.udacity.com/users/100012556/andrew-turner""><a href=""http://forums.udacity.com/users/100012556/andrew-turner"">@Andrew</a></a> Indeed, it could return <code>1</code> (which would be <code>==True</code>), I would advocate always using <code>is</code> rather than <code>==</code> for these type of tests. </p>
+<p><em>Also, asserts should not have ""side-effects"", so IMO a good idea is to</em> always have the assert line compare variables rather than calling any functions/methods e.g. <code>en1=q.enqueue(1); assert en1 is True</code>.</p>";comment;12003105;12001170;2012-07-25 11:44:07.639773+00;0;;\N;100001468;2012-07-25 11:44:07.639773+00;12004308;\N;\N;0;f
+12003145;;cs258 ;100011737;"<p>first of all, I wanted to say that this was much more interesting than running on the sodukus.  I'd like to hear what others are using for bug reports.  (the released valgrind doesn't handle MacOSX applications well, although saw some posts that they may have some of the bugs fixed in the SVN repository)</p>
+<p>Anyways, I tested on a MacSPICE, a MacOSX CAD program for circuit simulation.  I used the sample libraries provided with the program as my starting point, and fuzzed per the Charlie Miller / class video.  The program didn't like the normal unix path I was feeding it, so I needed to move the fuzzed file to an application-specific directory first, and then launch the program with the source file as an argument.  I added a very minor bit of logging to save the files that caused crashes:</p>
+<pre><code>num_crashes = 0
+...
+process = subprocess.Popen([app,fuzz_output])
+time.sleep(1)
+crashed = process.poll()
+if not crashed:
+    process.terminate()
+else:
+    num_crashes = num_crashes + 1
+    print ""Crash# "" + str(num_crashes) + "" for fuzzed file "" + file_choice
+    log_crash_fname = ""crashed_fuzzfile_"" + str(num_crashes) + "".cir""
+    open(log_crash_fname,'wb').write(buf)
+</code></pre>
+<p>After ~2k iterations, I'd had 5 crashes due to invalid memory execution attempts.  These were being caused by corruption of some arguments to some of the SPICE deck commands:</p>
+<pre><code>* Normal line:
+.disto dec 20 1.0e3 1.0e8 0.9
+
+* Corrupted line:
+.disto dec 20 1.0e3 1.0N8 0.9
+</code></pre>
+<p><strong>Update:</strong><br>
+I had sent one of these bugs to the developer, and just got a nice note back indicating that he had found and fixed the cause of the crash.  And then he invited me to send any other bugs found (while also warning about the ability to construct and execute shell commands with certain inputs).   I did feel a bit guilty about sending the bug back to him, as in the scheme of things, crashing from an invalid input isn't as big of a deal for this type of program as, say, not running a valid analysis or giving an incorrect result.  I have really appreciated his ongoing development effort of this tool over the years (most non-commercial SPICE tools don't get too far from the crusty university code).  So, <em>cheapeau!!!</em> </p>
+<p>Matt</p>";answer;12002918;12002918;2012-07-26 05:34:26.888958+00;3;(accepted);12031883;100011737;2012-07-26 13:58:05.65238+00;12004358;\N;\N;0;t
+12003163;;cs258 ;100004871;"<p>Thanks for mentioning changes in specifications.  From your comments it is clear that tweaking the random tester due to spec changes is much easier then trying to tweak the hand-written testcases.  Also, it is easier to determine if testcases changes required due to spec changes are adequately done for a random tester.</p>
+<p>Unit 5 includes more information about the test suite which addresses some of my concerns.  I'm still not quite sure why he doesn't include the random tester in the test suite.  I can see that if you want your test suite to produce predictable results you don't to include the random tester.  But it seems finding bugs is more important than having a test suite that is constant -- always testing the same thing.  But then again, in following Unit 5, when a random tester comes up with a bug, the procedure is to pare down the testcase to the minimum that produces the problem.  That testcase can be added to the test suite.  So, okay, I see now why a random tester would not be included in the test suite.</p>";comment;12003049;12003045;2012-07-26 19:03:28.199609+00;0;;\N;100004871;2012-07-26 19:03:28.199609+00;12004367;\N;\N;0;f
+12003167;;cs258 ;100016314;"<p>Hi <a href=""http://forums.udacity.com/users/100004871/kris-king""><a href=""http://forums.udacity.com/users/100004871/kris-king"">@Kris King</a></a>, I agree with you in the inclusion of the random tester in the regression suite, for me also finding more bugs is more important than a constant regression suite.</p>
+<p>Once the software/hardware under test is somewhat mature, my experience is that the primary regression is the random tester, supplemented by something else (could be a fixed regression suite) that acts as a 'sanity' check, in case your random tester has gone off into the bit bucket for some reason.</p>";comment;12003049;12003045;2012-07-26 21:10:12.062938+00;1;;\N;100016314;2012-07-26 21:10:12.062938+00;12004371;\N;\N;0;f
+12003208;;cs258 ;100016366;"<p>ImageMagick however returns 0 for success or 1 for error, It has lots of error codes internally or for example in php, but for the command line utilities such as convert it's just plain old 0 or 1 :</p>
+<p><a href=""http://www.imagemagick.org/script/command-line-tools.php"" rel=""nofollow"">http://www.imagemagick.org/script/command-line-tools.php</a>: </p>
+<blockquote>
+<p>The ImageMagick command-line tools exit with a status of 0 if the command line<br>
+arguments have a proper syntax and no problems are encountered. Expect a descriptive <br>
+message and an exit status of 1 if any exception occurs such as improper syntax, a <br>
+problem reading or writing an image, or any other problem that prevents the command <br>
+from completing successfully.</p>
+</blockquote>
+<p>In which case you can Identify that convert failed with Popen poll() etc, but not how so you do need to check stderr on exit to see if it failed nicely or not.</p>";comment;12003192;12003038;2012-07-28 20:10:18.074775+00;0;;\N;100016366;2012-07-28 20:10:18.074775+00;12004425;\N;\N;0;f
+12003234;;cs258 ;100118130;<p>I agree with your answers except to say, in the first part of my question, I did not mean the 487 was a bad choice because of its speed. I was thinking that the calculation which said the error would be found in a day was based on the speed of the SUT, and I thought, at the time of writing, the speed calculation should have been based on the speed of the oracle. Anyway, a minor point, and I may have been wrong about that point as well since I forgot that the 487 was a separate floating point processor.</p>;comment;12003209;12003201;2012-07-30 02:06:30.03362+00;1;;\N;100118130;2012-07-30 02:06:30.03362+00;12004463;\N;\N;0;f
+12003238;;cs258 ;100072702;<p>You don't have to communicate. At all. You just need to collect results of FP computations on the same sample program from Pentium and from 486, and compare them. Simple as that =)</p>;comment;12003233;12003201;2012-07-30 18:07:14.744022+00;0;;\N;100072702;2012-07-30 18:07:14.744022+00;12004469;\N;\N;0;f
+12003241;;cs258 ;100031056;<p>You're merely delaying the communications overhead.  Writing to a local disk is communications overhead.  Around 1992 (when Pentium came out), disks maxed out at about 1MB/sec.  FDIV results in a 10-byte result.  Assume on the 486 and Pentium system we use pseudo-random numbers from the same seed, so all we need are the results.  At 1MB/sec, we can write to the local disk at 100,000 results/second.  FDIV on Pentium took 39 clocks, and Pentium released at 60MHz.  So we're limited by disk speed to write the results.  At 100,000 results per second, that leave 600-39=561 clocks to do FP emulation of FDIV.  This is trivial, emulation can be done at least twice that fast without even being carefully optimized.  That beats just writing the results to disk, and ignores the time to read back the results for comparison.  Even if you assume much faster disks, once you count in the time to read back the results, FP emulation easily is the better choice.</p>;comment;12003233;12003201;2012-07-30 19:02:33.866452+00;2;;\N;100031056;2012-07-30 19:02:33.866452+00;12004472;\N;\N;0;f
+12003274;;cs258 ;100008281;"<p>a macro-based implementation sounds great.. I was hoping that someone would find the idea useful and then adapt it according to his/her preferences.  I agree with your comment about using the ptr twice.. it is effective but I do not like it.  I tried different options but what ended up happening was that my allocations became buried in libraries and now I seldom have a need to use safe_malloc() directly so it stop bothering me.  The benefits are still there, though.  All I have to do is to use malloc_objects_num() at the end of the program.</p>
+<p>Another possible advantage of using macros is that you could have it work as a normal malloc() or as safe_malloc() depending on a flag.  There are some pathological data structures, llke double-linked lists, that use mallocs so often that it might make sense to use safe_malloc() only while developing the application and then, once you are reasonably sure that there is no memory leak, go back to the normal malloc to avoid the penalty of calling an additional function and the cost of the addition or substraction every time that the 'safe' routines are called.</p>";comment;12003270;12003175;2012-08-02 04:54:11.659652+00;0;;\N;100008281;2012-08-02 04:54:11.659652+00;12004511;\N;\N;0;f
+12003293;Google TechTalks on writing testable code;cs258 meta resource;100094587;"<p>There are a number of great talks by Misko Hevery, available for free on YouTube. Misko's main message is that testing is easy IF the software under test is written in a testable way. He then goes on to talk in great detail on how testability can be achieved in practice. </p>
+<p><a href=""http://www.youtube.com/watch?v=-FRm3VPhseI&amp;feature=relmfu"" rel=""nofollow"">http://www.youtube.com/watch?v=-FRm3VPhseI&amp;feature=relmfu</a></p>
+<p><a href=""http://www.youtube.com/watch?v=RlfLCWKxHJ0&amp;feature=relmfu"" rel=""nofollow"">http://www.youtube.com/watch?v=RlfLCWKxHJ0&amp;feature=relmfu</a></p>
+<p>and others</p>";question;\N;\N;2012-08-03 14:02:03.639786+00;3;;12042905;100094587;2012-08-03 14:02:03.639786+00;12005238;\N;\N;250;f
+12003321;;cs258 ;100118210;"<p>I would handle this with ""if"" where program is expected to take action and continue [user inputs negative number to prompt, program justs asks for another number] and exception if program is expected to gracefully terminate [negative number read from file, need to close file and free memory before terminating]</p>
+<p>Note that if you are writing a library routine that throws exceptions, every program using that library needs to include a handler for each exception - ""if"" with bogus return may be easier for users</p>";comment;12003286;12003197;2012-08-04 14:18:14.886333+00;0;;\N;100118210;2012-08-04 14:18:14.886333+00;12004564;\N;\N;0;f
+12003329;;cs258 ;100016366;"<p>I also found it annonying that eog kept popping up on top of whatever I was doing whatever desktop I was on. So I started using one of the *box dm's (fluxbox specifically), the switch was also partly due to my IceWM process memory ueage growing with every open &amp; close of eog.  The *box dm's allow you to set whether new windows can focus or not by setting:</p>
+<pre><code>focusNewWindows: False
+</code></pre>
+<p>in your ~/.fluxbox/init file . Which now means I can work while eog opens and closes behind whatever I'm doing.</p>";comment;12003326;12003326;2012-08-05 07:55:29.453284+00;1;;12035157;100016366;2012-08-05 07:56:28.526324+00;12004573;\N;\N;0;f
+12003350;Blog Article on Fuzzy Testing;cs258 discussion testing resource;100073209;"<p><a href=""http://eclipsesource.com/blogs/2012/08/06/fuzzy-testing-of-datamodel-centric-applications/"" rel=""nofollow""></a><a href=""http://eclipsesource.com/blogs/2012/08/06/fuzzy-testing-of-datamodel-centric-applications/"" rel=""nofollow"">http://eclipsesource.com/blogs/2012/08/06/fuzzy-testing-of-datamodel-centric-applications/</a></p>";question;\N;\N;2012-08-06 23:37:46.5968+00;1;;12042918;100004818;2012-08-07 13:18:19.866239+00;12005251;\N;\N;225;f
+12003365;;cs258 ;100016314;"<p>Thanks <a href=""http://forums.udacity.com/users/100027024/anthony-teate-2""><a href=""http://forums.udacity.com/users/100027024/anthony-teate-2"">@Anthony</a></a> Teate. I think this is an important class for real-life/industry. It has been a good class, and I think it could be an even better class with a little bit of additional work.</p>";comment;12003298;12003298;2012-08-07 21:37:04.112423+00;0;;\N;100016314;2012-08-07 21:37:04.112423+00;12004630;\N;\N;0;f
+12003379;;cs258 ;100080092;"<p>I get it, except for one thing - the converter gives a run time error if it  can't convert the bytearray back to a string - I'll just fuzz with values 20 to 126.</p>
+<p>Thanks!</p>";comment;12003376;12003375;2012-08-08 02:53:27.67538+00;0;;\N;100080092;2012-08-08 02:53:27.67538+00;12004650;\N;\N;0;f
+"<p>A tweak to the code above, another way to remove the loop</p>
+<pre><code>def str_to_bin2(s, pad=7):
+output = """"
+for c in s:
+    b = bin(ord(c))
+    b = b[2:] # Cut off the '0b' from the front
+    output = '0' * (pad-len(b)) + b + output
+return output
+</code></pre>";;;;;;;;;;;;;;;;;;
+<p>About the last homework, to which number should I round 3.5 for example?</p>;;;;;;;;;;;;;;;;;;
+"<p>After I save the homework answer and come back later I do not see it saved. Is there a problem?</p>
+<p>For programming homework it is saved in python.</p>
+<p>Sandip</p>";;;;;;;;;;;;;;;;;;
+<p>Anybody who hasn't finished homework 1 yet?</p>;;;;;;;;;;;;;;;;;;
+"<p>Assuming: var1 = ""dinner""</p>
+<p>print var1[7]<br>
+returns the error message: ""IndexError: string index out of range""<br>
+(OK, I understand that)</p>
+<p>but<br>
+print var1[:7] + var1[7:]<br>
+returns no error message<br>
+WHY NOT?</p>";;;;;;;;;;;;;;;;;;
+"<p>can anyone tell me how and from where to install python.<br>
+and how to start working</p>";;;;;;;;;;;;;;;;;;
+<p>can i use functions we haven't taken yet ? !</p>;;;;;;;;;;;;;;;;;;
+<p>Can we turn the word caption on and off for the reading of the course material?</p>;;;;;;;;;;;;;;;;;;
+<p>does somebody know how to do this?</p>;;;;;;;;;;;;;;;;;;
+<p>Dudas y consultas sobre la tarea numero 1.</p>;;;;;;;;;;;;;;;;;;
+<p>English isn't my first language and the subtitles are so helpful until lesson 14, after that, the videos don't have subtitles. So please, if possible, put subtitles on the videos, i'm really liking this course, thanks for the work.</p>;;;;;;;;;;;;;;;;;;
+"<p>for I can not visit the udacity vedio pages,so can you help me to send me the CS101 Course Vedios via EMAIL.My Email is:<br>
+@8765004</p>";;;;;;;;;;;;;;;;;;
+"<p>Hello everybody, </p>
+<p>i just started the class today. At first i got an email that told me that i have to finish my homework till tomorow. I dont think i can make it in this short time. So what will happen if i dont finish.</p>";;;;;;;;;;;;;;;;;;
+<p>Hello, I don't know where to find in the web my own grade and the correct answers Could you help me? Thanks in advance, Vanesa.</p>;;;;;;;;;;;;;;;;;;
+"<p>Hi </p>
+<p>The find function returns a -1 when it doesn't find a sub-string in a string. My question is if there is a string say ""west"" and we find for t (""west"".find('t')), then it will return 3 as the position. But can it return -1 as well s it is the last position in the string ?  </p>";;;;;;;;;;;;;;;;;;
+"<p>Hi Guys, </p>
+<p>Does anyone know the model of the Digital Board the professor has been used during the course ?</p>
+<p>I am also a online professor in Brazil and I am interested on that type of gadget.</p>
+<p>Thanks, <br>
+Augusto</p>";;;;;;;;;;;;;;;;;;
+<p>Hi guys, if I go to my Stack Overflow profile I see a tab called accounts.  This forum looks like it was built as a Stack Exchange site and I signed in with the same email, is it possible to link the two so this will appear as under my Stack Overflow account tab?</p>;;;;;;;;;;;;;;;;;;
+"<p>Hi there!</p>
+<p>Any Hungarians doing the course? We could form a group!<br>
+;)</p>";;;;;;;;;;;;;;;;;;
+"<p>Hi, do you have an area in your forum to bestow homage to to excellent knowledge you are providing for free ?</p>
+<p>Thank you.</p>";;;;;;;;;;;;;;;;;;
+"<p>hi, i canot figure out why but if i search ""non english questions"" it returns an 500 internal server error i tried with other querys but all of the work</p>";;;;;;;;;;;;;;;;;;
+"<p>Hi<br>
+I am unable to give the programming quiz. I am not able to write anything on the browser inbuilt editor. Please help</p>";;;;;;;;;;;;;;;;;;
+<p>How do you close a question that is a duplicate of another? For example, there are MANY posts asking about the fist homework assignment. We have already answered this question and these other threads should be closed. Is there a karma requirement? If so, what is it? This isn't addressed in the FAQ.</p>;;;;;;;;;;;;;;;;;;
+"<p>How many of you have used ""if"" in the Rounding off problem?</p>";;;;;;;;;;;;;;;;;;
+<p>how to assign more than one line to avariable in python</p>;;;;;;;;;;;;;;;;;;
+<p>I added an answer concerning floating point accuracy, and the answer doesn't show up. But if I go to edit the question, the text is still there. Anyone else experiencing this?</p>;;;;;;;;;;;;;;;;;;
+<p>I am come from china.How to?</p>;;;;;;;;;;;;;;;;;;
+<p>i cant view the course content</p>;;;;;;;;;;;;;;;;;;
+<p>I didn't exactly understand what the 1st homework assignment question is about? Do we have to select options which are related to learning search engine or what?</p>;;;;;;;;;;;;;;;;;;
+"<p>I don't know how to count how many times a recursice defintion is run through. If I try to count with a variable( i = 0 and then i = i + 1) it is always set back to zero which is logical but I'm stuck here. Any suggestions?<br>
+Thanks!</p>";;;;;;;;;;;;;;;;;;
+<p>I don't see any way to submit the homework.</p>;;;;;;;;;;;;;;;;;;
+"<p>I know how to get it to print out udacity but how do you get the capital?<br>
+Any help would be appreciated.</p>";;;;;;;;;;;;;;;;;;
+"<p>I notice that if I go back and review the answers I submitted for each question,<br>
+The green check-mark turns to a yellow dot.  Does the yellow dot mean I must resubmit my answers?   </p>";;;;;;;;;;;;;;;;;;
+<p>i wonder why the output came out 2.998e+17</p>;;;;;;;;;;;;;;;;;;
+"<p>I'd like to know how many of ours took the (Sebastian&amp;Peter)'s Artificial Intelligence class last year? </p>";;;;;;;;;;;;;;;;;;
+<p>if n % 2 == 0: # n is even</p>;;;;;;;;;;;;;;;;;;
+"<p>I'm curious if the course will have information about preventing some of the basic gaming by web site owners/designers to increase their rankings?</p>
+<p>Thanks,<br>
+MBF2234</p>";;;;;;;;;;;;;;;;;;
+<p>In the last question of homework 1 i.e, rounding of numbers, what should be the rounding of 3.5 ? Is it 3 or 4 ?</p>;;;;;;;;;;;;;;;;;;
+<p>Is it possible to post pdf version of current/future homework(s), similar to the notes for Unit-1?</p>;;;;;;;;;;;;;;;;;;
+<p>Is there a way to change what is and isn't publicly displayed?</p>;;;;;;;;;;;;;;;;;;
+"<p>It states , that the complexity increases exponentially with the size of x. Assume x is a n-bit number. If x is close to $% 2^n - 1 $% , we approximately need to check those $% 2^n $% numbers. Now let y be a n+m-bit prime, assuming the highest bit is not zero. We now increased the pool of numbers to check from $% 2^n $% to $%2^m \cdot 2^n$%, so by increasing the number of bits by m we get in the worst case $% 2^m $% more modulo operations. Thats the trick ;)</p>
+<p>Well these are only approximate arguments but i think the idea is clear.</p>";;;;;;;;;;;;;;;;;;
+<p>It wont work with the opera browser, guys. </p>;;;;;;;;;;;;;;;;;;
+"<p>Natural: English, some French<br>
+Programming: First I'm going to list the ones I have used for more than a week or so at a time:Python (thanks to the Udacity courses), C++, C, Java (loathe it!), C#, JavaScript(been a while), FORTRAN(ugh),several variations on BASIC(ugh ugh), x86 Assembly, LISP.</p>
+<p>Languages I have used for tiny things that pop up: Lua, Perl(loathe it), Bash/Awk/Sed, Octave(just for simple plots), and no doubt a good 20 more I can't even recall (stuff like AmigaDos...well, I guess technically I just remembered that one lol).</p>
+<p>I can read Pascal, but I think that's a given for anyone with a C background. </p>
+<p>Yeah, I am quite confident I am forgetting a lot of them. C++ is my favourite, Python is busy making a special place in my heart.</p>";;;;;;;;;;;;;;;;;;
+<p>Please tell about the Course Application. How to use the Course for higher education and jobs?</p>;;;;;;;;;;;;;;;;;;
+"<p>Pycryto library version 2.3 for windows (windows installer) available at voidspace.org<br>
+but I am not sure this is the same version that the Server is using.  Version 2.5 is available<br>
+but we are not using the latest...maybe that is the problem?  A COMMENT should be added at the beginning of each set of code provided so that we aren't continually ""stuck"" using the wrong Version?</p>";;;;;;;;;;;;;;;;;;
+<p>Simple. They agree that say a negative integer denotes heads and positive one denotes tails. Alice picks an arbitrary large integer, k. Then she picks x = {-k, k} depending on the outcome of the coin toss, hashes that and sends it over to Bob. Now, in order for Bob to cheat, he needs to either guess the value k or hash all positive and negative integers and search for the hash Alice gave him. In order for Alice to cheat, she needs to find two integers k1, k2 such that H(k1) == H(-k2) or H(-k1) == H(k2). While neither feat is impossible, they both certainly are unfeasible, provided that H is perfect.</p>;;;;;;;;;;;;;;;;;;
+<p>Thanks for not telling all our students the reason for the delayed release of part two! (it's because I made a big mistake in a calculation and we just caught it yesterday. We will need to do some lightning-fast edits on Monday before releasing so that my inability to do arithmetic doesn't confuse everyone!)</p>;;;;;;;;;;;;;;;;;;
+<p>the answer choices for the hw dont seem to be saved tho the submission says saved. after reopening the question the boxes are still blank.</p>;;;;;;;;;;;;;;;;;;
+"<p>There was a lot of discussion of the problem in the forums.  Basically the ""key"" has to be the key for the entire alphabet, not a key per character.  So if the alphabet is A, there is only one key, also A.  If the alphabet is A there are two possible keys, AB or BA.  If the alphabet is ABC there are 6 possible keys, ABC, ACB, BAC, BCA, CAB, and CBA.  Now it would have been GREAT for someone to mention in the video what they were defining as a ""key"" for a substitution cypher because I also intuitively looked at it on a character by character basis.  </p>";;;;;;;;;;;;;;;;;;
+"<p>this is a little off this topic, but since 10^1 has two digits (10^2 three, 10^3 four etc.), wouldn't the numbers with 100 digits be {10^99, 10^99 + 1, ..., 10^100 - 1} ?</p>
+<p>in that case, the answer would be 114 (with 227.95 rounded to 228).</p>
+<p>could anyone please point out why they use 10^100 for a ""100-decimal-digit number"", when it has 101 digits?</p>";;;;;;;;;;;;;;;;;;
+"<p>those who were expecting for homework number 1... Is ready, just chech in your course content...</p>
+<p>Best Regards!!!</p>";;;;;;;;;;;;;;;;;;
+<p>Today is  4/16/12, have the courses gone live yet?  </p>;;;;;;;;;;;;;;;;;;
+<p>Welcome to the Udacity CS101 Discussion Forum! I hope you're all excited to learn about computer science and how to build a search engine!</p>;;;;;;;;;;;;;;;;;;
+<p>what is the difference between [S] and [s+s) ? are they the same </p>;;;;;;;;;;;;;;;;;;
+<p>what is the difference between [S] and [s+s) ? are they the same </p>;;;;;;;;;;;;;;;;;;
+<p>What kind of storage capacity is required to experiment on this course. Like to build a corpus for research. </p>;;;;;;;;;;;;;;;;;;
+<p>When I'll get my Unit-1 Homework marks??</p>;;;;;;;;;;;;;;;;;;
+"<p>When solving quizzes, homework, are we supposed to use only Python code that we were taught up to that point?</p>
+<p>Thanks.</p>";;;;;;;;;;;;;;;;;;
+<p>When using .find, -1 is returned if the sub-string doesn't exist. Is -1 the standard error return code for Python?</p>;;;;;;;;;;;;;;;;;;
+"<p>Where can I get additional examples for Unit 1, numbers 35 &amp; 36, Finding With Numbers?</p>";;;;;;;;;;;;;;;;;;
+<p>Where to find Grade of Home Work one</p>;;;;;;;;;;;;;;;;;;
+"<p>Why is the answer in the final quiz a href=""http://www.xkcd.com and not <a href=""http://www.udacity.com"" rel=""nofollow"">http://www.udacity.com</a> as mentioned in the preceding video?</p>";;;;;;;;;;;;;;;;;;
+<p>Why we count ''0'' for <strong>start</strong> instead of ''1'' and ''-1'' for the <strong>stop</strong> instead of ''0''. Seems more logical don't you thing?</p>;;;;;;;;;;;;;;;;;;
+<p>Would love to meet and review in person...local office hours?</p>;;;;;;;;;;;;;;;;;;
+<p>You should assume that the only thing the recipient who wants to validate the certificate is what is given in the answer choice.  There is no separate message to transmit m (which is not necessarily known to any of the participants) separately from the certificate.</p>;;;;;;;;;;;;;;;;;;
