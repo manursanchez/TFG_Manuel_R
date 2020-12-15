@@ -23,3 +23,15 @@ Author: Manuel Rodríguez Sánchez
 Director: Agustín Carlos Caminero Herráez
 
 Defense date: December 18, 2020
+
+## Instrucciones previas a la ejecución y pruebas de los patrones en el cluster
+
+Los patrones podemos ejecutarlos en modo local o en el cluster Hadoop. En los dos casos, usan una serie de archivos o tablas, que si queremos ejecutarlos en el cluster, hay que cargar estos archivos en el HDFS. Por esta razón, es aconsejable que se sigan las instrucciones detalladas en el cuaderno Jupyter llamado: "Instrucciones para cargar en HDFS los archivos de datos". Una vez hechos estos pasos, el sistema lo tendremos preparado para ejecutar los prototipos en el cluster. 
+En el caso que los ejecutemos en modo local no sería necesario. 
+No obstante, se puede ver un ejemplo de ejecución de cada uno de los prototipos, tanto en modo local como en el Cluster Hadoop.
+
+## Instructions before executing and testing the patterns in the cluster
+
+The patterns can be executed locally or in the Hadoop cluster. In both cases, they use datasets, that if we want to execute them in the cluster, we have to load these datasets in the HDFS. For this reason, it's advisable to follow the detailed instructions in the Jupyter Notebook called: "Instructions for uploading data files to HDFS". Once these steps are done, the system will be ready to run the prototypes in the cluster.
+In the case that we execute them in local mode it would not be necessary.
+However, you can see an example of execution of each of the prototypes, both in local mode and in the Hadoop Cluster.
